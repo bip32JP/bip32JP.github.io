@@ -206,7 +206,16 @@
             start_hash_worker(passphrase);
         } catch (err) {
             setErrorState($("#bip32_source_passphrase"), true, "Your browser doesn't support Web Workers: " + err.toString());
-            alert("It appears your browser cannot load or execute web workers.  If you are running locally using Chrome, run with the --allow-file-access-from-files option or use a HTTP server such as Python (python3 -m http.server)");
+            passphrase = Crypto.SHA256(passphrase, { asBytes: true });
+            var i = 0;
+            var oldpass = passphrase
+            while (i < 182) {
+                passphrase = Crypto.SHA256(passphrase + oldpass, { asBytes: true });
+                i++;
+            }
+            bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase + oldpass, { asBytes: true }));
+            updatePassphraseHash();
+            alert("あなたのブラウザーはウェブワーカーに対応していないかアクセスできない状態です。保存されたものをローカルで開いた場合、--allow-file-access-from-files のオプションをつけるかパイソンに備えてあるHTTPサーバを利用するかして下さい。(python3 -m http.server)\n\nパスワードを184回ハッシュにかけたが、それがセキュリティー的に充分なんて補償は…無いぞ？");
         }
     }
 
@@ -555,8 +564,8 @@
         $('#gen_from label input').on('change', onUpdateGenFrom );
         updateGenFrom();
 
-        $("#bip32_source_passphrase").val("crazy horse battery staple");
-        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma7zmsaP9xC84qwMpMPFZQNm8s5sNGGnhjF89AiaEx5nQ1PtKhYGEY5neSFGbzXxUHkpruggMd5xu4scRytwyEgjcFxiuDVfF");
+        $("#bip32_source_passphrase").val("オマエモナー");
+        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma8EaKxVhom3fUJnaHfZfhiAPfdBD6nu7ZUNvhZD4VmgYu3AyA45Lk6fAUGsqxy4d1uzEsB2vyEHj376Hd9xEUfuLFg1C2KJi");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
 
         $("#checkbox_show_passphrase").on('change', onShowPassphraseChanged );
