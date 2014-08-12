@@ -1,6 +1,7 @@
 (function($){
 
-    var bip39 = new BIP39('jp')
+    var bip39 = new BIP39('jp');
+    var isJP = true;
     var bip32_source_key = null;
     var bip32_derivation_path = null;
     var gen_from = "pass";
@@ -178,11 +179,15 @@
         setWarningState($("#bip32_source_passphrase"), false);
     }
 
-    function onShowPassphraseChanged() {
+    function onLanguageChanged() {
         if($(this).is(":checked")) {
-            $("#bip32_source_passphrase").attr('type', 'text');
+            bip39 = new BIP39('en');
+            isJP = false;
+            onCancelHashWorkerClicked();
         } else {
-            $("#bip32_source_passphrase").attr('type', 'password');
+            bip39 = new BIP39('jp');
+            isJP = true;
+            onCancelHashWorkerClicked();
         }
     }
 
@@ -202,8 +207,9 @@
 
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
-        passphrase = passphrase.replace(' ', '　');
-        
+        if(isJP){
+            passphrase = passphrase.replace(' ', '　');
+        }
         if(!bip39.validate(passphrase)&&passphrase!=''){
         
         alert( "不正なフレーズです。" );
@@ -565,7 +571,7 @@
         $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma98eEJRafud4QAA36sfvCRpBDopPrmoXVD92tugSp879NsNzBJg8dYzGUuNJfH9bChFNNSx8HF1pvzBZDt7k8dStYTKo8bof");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
 
-        //$("#checkbox_show_passphrase").on('change', onShowPassphraseChanged );
+        $("#checkbox_change_language").on('change', onLanguageChanged );
 
         $("#cancel_hash_worker").on('click', onCancelHashWorkerClicked);
         onInput("#bip32_source_key", onUpdateSourceKey);
