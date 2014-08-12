@@ -1,5 +1,6 @@
 (function($){
 
+    var bip39 = new BIP39('jp')
     var bip32_source_key = null;
     var bip32_derivation_path = null;
     var gen_from = "pass";
@@ -14,80 +15,80 @@
 
     var COINS = {
         btc_main: {
-            name: "Bitcoin",
-            network: "Mainnet",
+            name: "ビットコイン",
+            network: "メインネット",
             prefix: 0,
             private_prefix: 0+0x80,
             bip32_public: BITCOIN_MAINNET_PUBLIC,
             bip32_private: BITCOIN_MAINNET_PRIVATE
         },
         btc_test: {
-            name: "Bitcoin",
-            network: "Testnet",
+            name: "ビットコイン",
+            network: "テストネット",
             prefix: 0x6f,
             private_prefix: 0x6f+0x80,
             bip32_public: BITCOIN_TESTNET_PUBLIC,
             bip32_private: BITCOIN_TESTNET_PRIVATE
         },
         doge_main: {
-            name: "Dogecoin",
-            network: "Mainnet",
+            name: "ドージュコイン",
+            network: "メインネット",
             prefix: 0x1e,
             private_prefix: 0x1e+0x80,
             bip32_public: DOGECOIN_MAINNET_PUBLIC,
             bip32_private: DOGECOIN_MAINNET_PRIVATE
         },
         doge_test: {
-            name: "Dogecoin",
-            network: "Testnet",
+            name: "ドージュコイン",
+            network: "テストネット",
             prefix: 0x71,
             private_prefix: 0x71+0x80,
             bip32_public: DOGECOIN_TESTNET_PUBLIC,
             bip32_private: DOGECOIN_TESTNET_PRIVATE
         },
         ltc_main: {
-            name: "Litecoin",
-            network: "Mainnet",
+            name: "ライトコイン",
+            network: "メインネット",
             prefix: 0x30,
             private_prefix: 0x30+0x80,
             bip32_public: LITECOIN_MAINNET_PUBLIC,
             bip32_private: LITECOIN_MAINNET_PRIVATE
         },
         ltc_test: {
-            name: "Litecoin",
-            network: "Testnet",
+            name: "ライトコイン",
+            network: "テストネット",
             prefix: 0x6f,
             private_prefix: 0x6f+0x80,
             bip32_public: LITECOIN_TESTNET_PUBLIC,
             bip32_private: LITECOIN_TESTNET_PRIVATE
         },
         mona_main: {
-            name: "Monacoin",
-            network: "Mainnet",
+            name: "モナーコイン",
+            network: "メインネット",
             prefix: 0x32,
             private_prefix: 0x32+0x80,
             bip32_public: MONACOIN_MAINNET_PUBLIC,
             bip32_private: MONACOIN_MAINNET_PRIVATE
         },
         mona_test: {
-            name: "Monacoin",
-            network: "Testnet",
+            name: "モナーコイン",
+            network: "テストネット",
             prefix: 0x6f,
             private_prefix: 0x6f+0x80,
             bip32_public: MONACOIN_TESTNET_PUBLIC,
             bip32_private: MONACOIN_TESTNET_PRIVATE
         },
         kuma_main: {
-            name: "Kumacoin",
-            network: "Mainnet",
+            name: "クマコイン",
+            network: "メインネット",
             prefix: 0x2d,
             private_prefix: 0x2d+0x80,
             bip32_public: KUMACOIN_MAINNET_PUBLIC,
             bip32_private: KUMACOIN_MAINNET_PRIVATE
         },
         kuma_test: {
-            name: "Kumacoin",
-            network: "Testnet",
+            name: "クマコイン",
+            network: "テストネット",
             prefix: 0x75,
             private_prefix: 0x75+0x80,
             bip32_public: KUMACOIN_TESTNET_PUBLIC,
@@ -159,14 +160,15 @@
         if( gen_from == 'pass' ) {
             $("#bip32_source_passphrase").attr('readonly', false);
             $("#bip32_source_key").attr('readonly', true);
-            $("#gen_from_msg").html("Your passphrase is hashed using 50,000 rounds of HMAC-SHA256");
+            $("#cancel_hash_worker").attr('disabled', false);
+            $("#gen_from_msg").html("フレーズを記入してBIP32ウォレットを復元します。");
         } else {
             setErrorState($("#bip32_source_passphrase"), false);
             $("#bip32_source_passphrase").attr('readonly', true);
             $("#bip32_source_key").attr('readonly', false);
             stop_hash_worker();
             $("#cancel_hash_worker").attr('disabled', true);
-            $("#gen_from_msg").html("You can manually enter an Extended Private or Public key");
+            $("#gen_from_msg").html("マスタ秘密鍵及びマスタ公開鍵を入力してBIP32ウォレットを復元します。");
         }
     }
 
@@ -185,37 +187,32 @@
     }
 
     function onCancelHashWorkerClicked() {
-        stop_hash_worker();
+        //stop_hash_worker();
 
-        var passphrase = $("#bip32_source_passphrase").val();
-        bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase, { asBytes: true }));
+        var seed = bip39.generateMnemonic();
+        $("#bip32_source_passphrase").val(seed);
+        //var passphrase = $("#bip32_source_passphrase").val();
+        //bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase, { asBytes: true }));
+        
+        bip32_passphrase_hash = bip39.mnemonicToSeed(seed);
         updatePassphraseHash();
 
-        setWarningState($("#bip32_source_passphrase"), true, "The passphrase was hashed using a single SHA-256 and should be considered WEAK and INSECURE");
+        //setWarningState($("#bip32_source_passphrase"), true, "The passphrase was hashed using a single SHA-256 and should be considered WEAK and INSECURE");
     }
 
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
-        if( typeof(Worker) === undefined ) {
-            setErrorState($("#bip32_source_passphrase"), true, "Your browser doesn't support Web Workers");
-        } else {
-            setErrorState($("#bip32_source_passphrase"), false);
-        }
-
-        try {
-            start_hash_worker(passphrase);
-        } catch (err) {
-            setErrorState($("#bip32_source_passphrase"), true, "Your browser doesn't support Web Workers: " + err.toString());
-            passphrase = Crypto.SHA256(passphrase, { asBytes: true });
-            var i = 0;
-            var oldpass = passphrase
-            while (i < 182) {
-                passphrase = Crypto.SHA256(passphrase + oldpass, { asBytes: true });
-                i++;
-            }
-            bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase + oldpass, { asBytes: true }));
-            updatePassphraseHash();
-            alert("あなたのブラウザーはウェブワーカーに対応していないかアクセスできない状態です。保存されたものをローカルで開いた場合、--allow-file-access-from-files のオプションをつけるかパイソンに備えてあるHTTPサーバを利用するかして下さい。(python3 -m http.server)\n\nパスワードを184回ハッシュにかけたが、それがセキュリティー的に充分なんて補償は…無いぞ？");
+        passphrase = passphrase.replace(' ', '　');
+        
+        if(!bip39.validate(passphrase)&&passphrase!=''){
+        
+        alert( "不正なフレーズです。" );
+        
+        } else if(passphrase!='') {
+        
+        bip32_passphrase_hash = bip39.mnemonicToSeed(passphrase, "");
+        updatePassphraseHash();
+        
         }
     }
 
@@ -304,21 +301,21 @@
 
         if( isMasterKey(bip32_source_key) ) {
             if( bip32_source_key.has_private_key ) {
-                $("#bip32_key_info_title").html("<b>" + key_coin.name + " Master Private Key</b>");
+                $("#bip32_key_info_title").html("<b>" + key_coin.name + " マスタ秘密鍵</b>");
             } else {
-                $("#bip32_key_info_title").html("<b>" + key_coin.name + " Master Public Key</b>");
+                $("#bip32_key_info_title").html("<b>" + key_coin.name + " マスタ公開鍵</b>");
             }
         } else {
             if( bip32_source_key.has_private_key ) {
-                $("#bip32_key_info_title").html("<b>" + key_coin.name + " Derived Private Key</b>");
+                $("#bip32_key_info_title").html("<b>" + key_coin.name + " 派生秘密鍵</b>");
             } else {
-                $("#bip32_key_info_title").html("<b>" + key_coin.name + " Derived Public Key</b>");
+                $("#bip32_key_info_title").html("<b>" + key_coin.name + " 派生公開鍵</b>");
             }
         }
 
         var v = '' + pad8(bip32_source_key.version.toString(16));
-        if( bip32_source_key.has_private_key ) v = v + " (" + key_coin.name + " " + key_coin.network + " private key)";
-        else                                   v = v + " (" + key_coin.name + " " + key_coin.network + " public key)";
+        if( bip32_source_key.has_private_key ) v = v + " (" + key_coin.name + " " + key_coin.network + " 秘密鍵)";
+        else                                   v = v + " (" + key_coin.name + " " + key_coin.network + " 公開鍵)";
 
         $("#bip32_key_info_version").val(v);
 
@@ -409,7 +406,7 @@
 
         try {
             if(bip32_source_key == null) {
-                // if this is the case then there's an error state set on the source key
+                // if this is the case then theres an error state set on the source key
                 return;
             }
             console.log("Deriving: " + p);
@@ -428,8 +425,8 @@
             var checksum = Crypto.SHA256(Crypto.SHA256(bytes, {asBytes: true}), {asBytes: true}).slice(0, 4);
             $("#derived_private_key_wif").val(Bitcoin.Base58.encode(bytes.concat(checksum)))
         } else {
-            $("#derived_private_key").val("No private key available");
-            $("#derived_private_key_wif").val("No private key available");
+            $("#derived_private_key").val("秘密鍵は取得できません");
+            $("#derived_private_key_wif").val("秘密鍵は取得できません");
         }
 
         $("#derived_public_key").val(result.extended_public_key_string("base58"));
@@ -511,7 +508,7 @@
         case 'done':
             $("#bip32_hashing_progress_bar").width('100%');
             $("#bip32_hashing_style").removeClass("active");
-            $("#cancel_hash_worker").attr('disabled', true);
+            $("#cancel_hash_worker").attr('disabled', false);
             hash_worker_working = false;
             bip32_passphrase_hash = m.result;
             updatePassphraseHash();
@@ -542,7 +539,7 @@
     }
     
     function stop_hash_worker() {
-        $("#cancel_hash_worker").attr('disabled', true);
+        $("#cancel_hash_worker").attr('disabled', false);
         hash_worker_working = false;
         $("#bip32_hashing_progress_bar").css("width", "0%");
         if( hash_worker != null ) {
@@ -564,16 +561,16 @@
         $('#gen_from label input').on('change', onUpdateGenFrom );
         updateGenFrom();
 
-        $("#bip32_source_passphrase").val("オマエモナー");
-        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma8EaKxVhom3fUJnaHfZfhiAPfdBD6nu7ZUNvhZD4VmgYu3AyA45Lk6fAUGsqxy4d1uzEsB2vyEHj376Hd9xEUfuLFg1C2KJi");
+        $("#bip32_source_passphrase").val("さんさい　みうち　はそん　だっかい　おやゆび　けんすう　へび　ごさ　こんしゅん　のれん　きくばり　とつにゅう");
+        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma98eEJRafud4QAA36sfvCRpBDopPrmoXVD92tugSp879NsNzBJg8dYzGUuNJfH9bChFNNSx8HF1pvzBZDt7k8dStYTKo8bof");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
 
-        $("#checkbox_show_passphrase").on('change', onShowPassphraseChanged );
+        //$("#checkbox_show_passphrase").on('change', onShowPassphraseChanged );
 
         $("#cancel_hash_worker").on('click', onCancelHashWorkerClicked);
         onInput("#bip32_source_key", onUpdateSourceKey);
         $("#bip32_hashing_progress_bar").width('100%');
-        $("#cancel_hash_worker").attr('disabled', true);
+        $("#cancel_hash_worker").attr('disabled', false);
         updateSourceKey();
 
         $('#bip32_derivation_path').on('change', onUpdateDerivationPath);
