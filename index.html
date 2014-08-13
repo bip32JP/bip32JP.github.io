@@ -38,18 +38,18 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="crCurrency">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Monacoin Mainnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Bitcoin Mainnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
               <ul class="dropdown-menu">
-                <li><a href="#" id="mona_main">Monacoin Mainnet</a></li>
-                <li><a href="#" id="mona_test">Monacoin Testnet</a></li>
-                <li><a href="#" id="kuma_main">Kumacoin Mainnet</a></li>
-                <li><a href="#" id="kuma_test">Kumacoin Testnet</a></li>
                 <li><a href="http://blockchain.info/address/" id="btc_main">Bitcoin Mainnet</a></li>
                 <li><a href="http://blockexplorer.com/testnet/address/" id="btc_test">Bitcoin Testnet</a></li>
                 <li><a href="http://block-explorer.com/address/" id="ltc_main">Litecoin Mainnet</a></li>
                 <li><a href="#" id="ltc_test">Litecoin Testnet</a></li>
                 <li><a href="http://dogechain.info/address/" id="doge_main">Dogecoin Mainnet</a></li>
                 <li><a href="#" id="doge_test">Dogecoin Testnet</a></li>
+                <li><a href="#" id="mona_main">Monacoin Mainnet</a></li>
+                <li><a href="#" id="mona_test">Monacoin Testnet</a></li>
+                <li><a href="#" id="kuma_main">Kumacoin Mainnet</a></li>
+                <li><a href="#" id="kuma_test">Kumacoin Testnet</a></li>
                 <!-- Unsupported right now
                 <li><a href="http://explorer.litecoin.net/address/" title="0x30">LTC</a></li>
                 <li><a href="http://explorer.dot-bit.org/a/" title="0x34">NMC</a></li>
@@ -71,7 +71,7 @@
           <form action="/" class="form-horizontal" method="get">
             <fieldset>
               <legend>BIP32 Deterministic Key Generator</legend>
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label class="col-lg-2 control-label" for="from_pass">Derive From</label>
                 <div class="col-lg-10">
                   <div class="btn-group" data-toggle="buttons" id="gen_from">
@@ -81,32 +81,32 @@
                   &nbsp;&nbsp;<span class="help-inline" id="gen_from_msg"></span>
 
                 </div>
-              </div>
+              </div>-->
               <div class="form-group">
-                <label class="col-lg-2 control-label" for="bip32_source_passphrase">Passphrase</label>
+                <label class="col-lg-2 control-label" for="bip32_source_passphrase">Dark Wallet Passphrase</label>
                 <div class="col-lg-10">
                   <div class="row">
                     <div class="col-lg-12">
                       <div class="input-group">
-                        <input class="form-control" id="bip32_source_passphrase" type="password" />
-                        <div class="input-group-addon" style="height: 34px;">
+                        <input class="form-control" id="bip32_source_passphrase" style="width: 929px;" type="text" />
+                        <!--<div class="input-group-addon" style="height: 34px;">
                           <input type="checkbox" id="checkbox_show_passphrase" /> Show Passphrase
-                        </div>
+                        </div>-->
                       </div>
                     </div>
                   </div>
                   <p />
                   <div class="row" >
                     <div class="col-lg-12">
-                      <div class="progress progress-striped" id="bip32_hashing_style" style="margin-bottom: 10px;">
+                      <!--<div class="progress progress-striped" id="bip32_hashing_style" style="margin-bottom: 10px;">
                         <div class="progress-bar" style="width: 0%;" id="bip32_hashing_progress_bar">
                         </div>
-                      </div>
+                      </div>-->
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-lg-12">
-                        <input class="btn btn-default" title="Cancel" type="button" value="Cancel slow hash and use weak hash instead" id="cancel_hash_worker" />
+                        <!--<input class="btn btn-default" title="Cancel" type="button" value="Cancel slow hash and use weak hash instead" id="cancel_hash_worker" />-->
                     </div>
                   </div>
                 </div>
@@ -186,11 +186,11 @@
                   <select class="form-control" id="bip32_derivation_path">
                     <option value="m">Info: m</option>
                     <option value="m/i">Simple: m/i</option>
-                    <option value="m/k'/0" selected>External account (master): m/k'/0</option>
+                    <option value="m/k'/0">External account (master): m/k'/0</option>
                     <option value="m/k'/0/i">External account i'th keypair: m/k'/0/i</option>
                     <option value="m/k'/1">Internal account (master): m/k'/1</option>
                     <option value="m/k'/1/i">Internal account i'th keypair: m/k'/1/i</option>
-                    <option value="custom">Custom</option>
+                    <option value="custom" selected>Custom</option>
                   </select>
                 </div>
               </div>
@@ -198,7 +198,7 @@
                 <label class="col-lg-2 control-label" for="bip32_custom_path">Custom Path</label>
                 <div class="col-lg-10">
                   <div class="input-group">
-                    <input class="form-control" id="bip32_custom_path" type="text" placeholder="m/i" />
+                    <input class="form-control" id="bip32_custom_path" type="text" value="m/0'/0/0" />
                   </div>
                 </div>
               </div>

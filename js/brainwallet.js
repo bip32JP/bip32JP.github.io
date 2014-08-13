@@ -10,7 +10,7 @@
     var TIMEOUT = 600;
     var timeout = null;
 
-    var coin = "mona_main";
+    var coin = "btc_main";
 
     var COINS = {
         btc_main: {
@@ -95,10 +95,10 @@
         }
     };
 
-    var PUBLIC_KEY_VERSION = 0x32;
-    var PRIVATE_KEY_VERSION = 0x32+0x80;
+    var PUBLIC_KEY_VERSION = 0;
+    var PRIVATE_KEY_VERSION = 0x80;
     var ADDRESS_URL_PREFIX = ''
-    var BIP32_TYPE = MONACOIN_MAINNET_PRIVATE;
+    var BIP32_TYPE = BITCOIN_MAINNET_PRIVATE;
 
     function pad(str, len, ch) {
         padding = '';
@@ -180,7 +180,7 @@
         if($(this).is(":checked")) {
             $("#bip32_source_passphrase").attr('type', 'text');
         } else {
-            $("#bip32_source_passphrase").attr('type', 'password');
+            $("#bip32_source_passphrase").attr('type', 'text');
         }
     }
 
@@ -196,27 +196,8 @@
 
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
-        if( typeof(Worker) === undefined ) {
-            setErrorState($("#bip32_source_passphrase"), true, "Your browser doesn't support Web Workers");
-        } else {
-            setErrorState($("#bip32_source_passphrase"), false);
-        }
-
-        try {
-            start_hash_worker(passphrase);
-        } catch (err) {
-            setErrorState($("#bip32_source_passphrase"), true, "Your browser doesn't support Web Workers: " + err.toString());
-            passphrase = Crypto.SHA256(passphrase, { asBytes: true });
-            var i = 0;
-            var oldpass = passphrase
-            while (i < 182) {
-                passphrase = Crypto.SHA256(passphrase + oldpass, { asBytes: true });
-                i++;
-            }
-            bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase + oldpass, { asBytes: true }));
-            updatePassphraseHash();
-            alert("あなたのブラウザーはウェブワーカーに対応していないかアクセスできない状態です。保存されたものをローカルで開いた場合、--allow-file-access-from-files のオプションをつけるかパイソンに備えてあるHTTPサーバを利用するかして下さい。(python3 -m http.server)\n\nパスワードを184回ハッシュにかけたが、それがセキュリティー的に充分なんて補償は…無いぞ？");
-        }
+        bip32_passphrase_hash = mn_decode(passphrase);
+        updatePassphraseHash();
     }
 
     function updatePassphraseHash() {
@@ -409,7 +390,7 @@
 
         try {
             if(bip32_source_key == null) {
-                // if this is the case then there's an error state set on the source key
+                // if this is the case then theres an error state set on the source key
                 return;
             }
             console.log("Deriving: " + p);
@@ -564,8 +545,8 @@
         $('#gen_from label input').on('change', onUpdateGenFrom );
         updateGenFrom();
 
-        $("#bip32_source_passphrase").val("オマエモナー");
-        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma8EaKxVhom3fUJnaHfZfhiAPfdBD6nu7ZUNvhZD4VmgYu3AyA45Lk6fAUGsqxy4d1uzEsB2vyEHj376Hd9xEUfuLFg1C2KJi");
+        $("#bip32_source_passphrase").val("apologize silver repeat avoid letter screen understand grass horrible stream pure pulse");
+        $("#bip32_source_key").val("xprv9s21ZrQH143K2V5pRoQvvXgcEVAUU12DK2cjAZjH8DzAKMjp3wTSoiSkhmxHftvNxT2yoqQMTGYhA9sXWAQF7hQZCkpfWaJNw1Jzxc8isyC");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
 
         $("#checkbox_show_passphrase").on('change', onShowPassphraseChanged );
