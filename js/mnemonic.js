@@ -31,6 +31,10 @@ function mn_decode(str) {
         var w1 = mn_words.indexOf(wlist[i]);
         var w2 = (mn_words.indexOf(wlist[i+1])) % n;
         var w3 = (mn_words.indexOf(wlist[i+2])) % n;
+        if(w1 == -1 || w2 == -1 || w3 == -1){
+            alert( "Incorrect Phrase: check spelling." );
+            return;
+        }
         var x = w1 + n * mn_mod((w2 - w1), n) + n * n * mn_mod((w3 - w2), n);
         out += ('0000000' + x.toString(16)).slice(-8);
     }
