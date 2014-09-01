@@ -211,6 +211,7 @@
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
         var seed_pw = $("#bip39_passphrase").val();
+        seed_pw = seed_pw.normalize("NFKD");
         if(isJP){
             passphrase = passphrase.replace(' ', '　');
         }
@@ -220,6 +221,7 @@
         
         } else if(passphrase!='') {
         
+        passphrase = passphrase.normalize("NFKD");
         bip32_passphrase_hash = bip39.mnemonicToSeed(passphrase, seed_pw);
         updatePassphraseHash();
         
