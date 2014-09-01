@@ -160,12 +160,14 @@
     function updateGenFrom() {
         if( gen_from == 'pass' ) {
             $("#bip32_source_passphrase").attr('readonly', false);
+            $("#bip39_passphrase").attr('readonly', false);
             $("#bip32_source_key").attr('readonly', true);
             $("#cancel_hash_worker").attr('disabled', false);
             $("#gen_from_msg").html("フレーズを記入してBIP32ウォレットを復元します。");
         } else {
             setErrorState($("#bip32_source_passphrase"), false);
             $("#bip32_source_passphrase").attr('readonly', true);
+            $("#bip39_passphrase").attr('readonly', true);
             $("#bip32_source_key").attr('readonly', false);
             stop_hash_worker();
             $("#cancel_hash_worker").attr('disabled', true);
@@ -195,11 +197,12 @@
         //stop_hash_worker();
 
         var seed = bip39.generateMnemonic();
+        var seed_pw = $("#bip39_passphrase").val();
         $("#bip32_source_passphrase").val(seed);
         //var passphrase = $("#bip32_source_passphrase").val();
         //bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase, { asBytes: true }));
         
-        bip32_passphrase_hash = bip39.mnemonicToSeed(seed);
+        bip32_passphrase_hash = bip39.mnemonicToSeed(seed, seed_pw);
         updatePassphraseHash();
 
         //setWarningState($("#bip32_source_passphrase"), true, "The passphrase was hashed using a single SHA-256 and should be considered WEAK and INSECURE");
@@ -207,6 +210,7 @@
 
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
+        var seed_pw = $("#bip39_passphrase").val();
         if(isJP){
             passphrase = passphrase.replace(' ', '　');
         }
@@ -216,7 +220,7 @@
         
         } else if(passphrase!='') {
         
-        bip32_passphrase_hash = bip39.mnemonicToSeed(passphrase, "");
+        bip32_passphrase_hash = bip39.mnemonicToSeed(passphrase, seed_pw);
         updatePassphraseHash();
         
         }
@@ -570,6 +574,7 @@
         $("#bip32_source_passphrase").val("さんさい　みうち　はそん　だっかい　おやゆび　けんすう　へび　ごさ　こんしゅん　のれん　きくばり　とつにゅう");
         $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma98eEJRafud4QAA36sfvCRpBDopPrmoXVD92tugSp879NsNzBJg8dYzGUuNJfH9bChFNNSx8HF1pvzBZDt7k8dStYTKo8bof");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
+        onInput("#bip39_passphrase", onUpdateSourcePassphrase);
 
         $("#checkbox_change_language").on('change', onLanguageChanged );
 
