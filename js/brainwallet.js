@@ -198,7 +198,9 @@
 
         var seed = bip39.generateMnemonic();
         var seed_pw = $("#bip39_passphrase").val();
+        seed_pw = seed_pw.normalize("NFKD");
         $("#bip32_source_passphrase").val(seed);
+        seed = seed.normalize("NFKD");
         //var passphrase = $("#bip32_source_passphrase").val();
         //bip32_passphrase_hash = Crypto.util.bytesToHex(Crypto.SHA256(passphrase, { asBytes: true }));
         
