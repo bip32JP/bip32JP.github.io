@@ -1,193 +1,193 @@
 [
     {
-       "entropy": "00000000000000000000000000000000"
-        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あお"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "486b521785abb98a4d9f056629564cad7d661682ad4bd9cf46320acb4d941831f44fa0d221e529655b72a108d01837dcf03f63876b95c05d33eb690f63dbaa5b"
+       "entropy": "00000000000000000000000000000000",
+        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あお",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "486b521785abb98a4d9f056629564cad7d661682ad4bd9cf46320acb4d941831f44fa0d221e529655b72a108d01837dcf03f63876b95c05d33eb690f63dbaa5b",
     "bip32_xprv": "xprv9s21ZrQH143K2meFDwBSe22E5dQzpc1UtN6VJEdkwCD5Yst891wfFe3fFgghBNhvdVGYnVuH568Dtp2Js6YXEwAUB946hf1Wk1AFDJeNZfj"
     },
 
     {
-       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
-        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろてん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "4a109c48e86922c9bb4ea405f4e76083596f07a09e58389dd718b50665d03bc7bd1685388b81dfefb968fe1dda7fa659b1ceb01b9a100d92d68f6fa575f539a9"
+       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろてん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "4a109c48e86922c9bb4ea405f4e76083596f07a09e58389dd718b50665d03bc7bd1685388b81dfefb968fe1dda7fa659b1ceb01b9a100d92d68f6fa575f539a9",
     "bip32_xprv": "xprv9s21ZrQH143K27wRixH3rmSkiYbavQ23zgfEp5uVLRqUR8o4MdyfEWtyvqWxjNDVUZxU9ZhKLBbafx2r5mjNhDkyuFsVKgHkp61wGaJL7A3"
     },
 
     {
-       "entropy": "80808080808080808080808080808080"
-        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あおぞら"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "75e5f72bdbc1043f3cb986b691c1219ebe8d536db6fe18286923eb48a249fc3d280b5b28a45157e91c3a853c0535f1f79604cacd4b636472b6049b0355669864"
+       "entropy": "80808080808080808080808080808080",
+        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あおぞら",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "75e5f72bdbc1043f3cb986b691c1219ebe8d536db6fe18286923eb48a249fc3d280b5b28a45157e91c3a853c0535f1f79604cacd4b636472b6049b0355669864",
     "bip32_xprv": "xprv9s21ZrQH143K3JQecoSNPTaEkj4PLzDVo2Mqim1qjdeLqedMiZH8X6tyGKiarMcT2TsB5q87zcdLUoimmpMnuHyE27qb44jjssk5T2LHX4E"
     },
 
     {
-       "entropy": "ffffffffffffffffffffffffffffffff"
-        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　ろこつ"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "0f551360978ef12073b3c8f2266e1f06172190576395e153719fa2af9b078aefdee14a31c1ae190da8a788a8925d463edc0b6ce960a2958171075a359c8a61c3"
+       "entropy": "ffffffffffffffffffffffffffffffff",
+        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　ろこつ",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "0f551360978ef12073b3c8f2266e1f06172190576395e153719fa2af9b078aefdee14a31c1ae190da8a788a8925d463edc0b6ce960a2958171075a359c8a61c3",
     "bip32_xprv": "xprv9s21ZrQH143K2YjdvhKxFwfTGt897dz4WejCxbooD4uyPebtYbK6mCb8xk1FCQyt5QDj6dmqU37cGo5D6oHFEayPf9DF15PqSJ6fqU8m2sB"
     },
 
     {
-       "entropy": "000000000000000000000000000000000000000000000000"
-        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　いがい"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "e3032c02749650f10aa6c07fd7791d90eaca4c6ea1af315acca1896289acf27bca9695634381b215ce2e1437e5ecee54c3130951814e36aa4c65930eb8f242a6"
+       "entropy": "000000000000000000000000000000000000000000000000",
+        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　いがい",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "e3032c02749650f10aa6c07fd7791d90eaca4c6ea1af315acca1896289acf27bca9695634381b215ce2e1437e5ecee54c3130951814e36aa4c65930eb8f242a6",
     "bip32_xprv": "xprv9s21ZrQH143K3z37FHgGYHXZQN3xMcX1YtkKv5h5SimVNB7XtJ6tg2JdyP5RKwdgppcyVebcKLHsbhyaRi23PhuThyptMWQMopm71qjZPn2"
     },
 
     {
-       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
-        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　りろん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "1346a1f23c208be46192dd86181d69480a47a988688917014f42a30834ea93b8aa17c77900e59c20819c625e5913b01d981e6726d54a757b7ea867ef53b162f1"
+       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　りろん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "1346a1f23c208be46192dd86181d69480a47a988688917014f42a30834ea93b8aa17c77900e59c20819c625e5913b01d981e6726d54a757b7ea867ef53b162f1",
     "bip32_xprv": "xprv9s21ZrQH143K2Mh6Cz868rvSjQSN6NLefuYBGjJP8ecEHJbKVu1FEC4qB1rVC1H5h8YppQGSQCChyCLygWKfedRbUYnQaQNE7Y6E4WVP6Qj"
     },
 
     {
-       "entropy": "808080808080808080808080808080808080808080808080"
-        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　いなか"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "e677d8c539c0ca35472ddb127879fcb5d636e3c3dc14e8ec08140f119e352a6a5acd42cc0fb292b20ad787b9b29115b6e237a70dc7558f8581fc4d1ead5c2b9a"
+       "entropy": "808080808080808080808080808080808080808080808080",
+        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　いなか",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "e677d8c539c0ca35472ddb127879fcb5d636e3c3dc14e8ec08140f119e352a6a5acd42cc0fb292b20ad787b9b29115b6e237a70dc7558f8581fc4d1ead5c2b9a",
     "bip32_xprv": "xprv9s21ZrQH143K36dCfatbNLaScdzMgie3qvviJ9RqEK5B2hQVatmhz9XwD4rGCBXWpnT3NkdZbGJWKJVS7XGo7CvZAYwdbJYLHMivKesGtYc"
     },
 
     {
-       "entropy": "ffffffffffffffffffffffffffffffffffffffffffffffff"
-        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　りょうきん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "0e04e9913f3420661e671cbf94d35731ad5d8f16148aea7d9184a0a5dbf5bdc27f47889cc1a721642d030c7450f35311bcba22147da659fb2b81eb62fd457607"
+       "entropy": "ffffffffffffffffffffffffffffffffffffffffffffffff",
+        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　りょうきん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "0e04e9913f3420661e671cbf94d35731ad5d8f16148aea7d9184a0a5dbf5bdc27f47889cc1a721642d030c7450f35311bcba22147da659fb2b81eb62fd457607",
     "bip32_xprv": "xprv9s21ZrQH143K4TUUPm8H4Jn61U6D5Y8Ku5ddYLjFqwucjGneMXpcb9vWfULdRcLmwTYB1qCdKtnsCXFhfbWgCKzDBqkkXDjzmM8UpD1PPGn"
     },
 
     {
-       "entropy": "0000000000000000000000000000000000000000000000000000000000000000"
-        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　うく"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "bc044bb8201b44124944cb04c45e23a0b0cc744b48fb722945c81c89e37ffd18af737b6c9c04653bf60dbf39a87f63f74971e06ea11da438be71d79c0ee65619"
+       "entropy": "0000000000000000000000000000000000000000000000000000000000000000",
+        "phrase": "あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　あい　うく",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "bc044bb8201b44124944cb04c45e23a0b0cc744b48fb722945c81c89e37ffd18af737b6c9c04653bf60dbf39a87f63f74971e06ea11da438be71d79c0ee65619",
     "bip32_xprv": "xprv9s21ZrQH143K3WX9F7Ey8dqPph6yWttdwSHPYpqRdkzS9goWab397oMSrvJ8jc5RtDYmJABSakjRpmQtqpA8KAyiTWdf6jn6Ss3RQRoGFyh"
     },
 
     {
-       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
-        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　ほそく"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "e418106a9f4bd2bba9f9b1147572ee086d6a0fb831cef8e0beef88087511ee5cc51ac1954da037f1ac145fbb4ba21fca9437087dafefd1a46b71d46825feae18"
+       "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+        "phrase": "たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　やそう　たいみんぐ　れいせい　へんきん　ろせん　りくつ　のれん　ろうか　ほそく",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "e418106a9f4bd2bba9f9b1147572ee086d6a0fb831cef8e0beef88087511ee5cc51ac1954da037f1ac145fbb4ba21fca9437087dafefd1a46b71d46825feae18",
     "bip32_xprv": "xprv9s21ZrQH143K3peuEyLphnPgJQUfkSzpdQ6aNvGxyX6FpBRW7zozyYwt5imdsSAGZ95fsTNjAorrEJi7fRU8p7Rp2tPkkHM3Cgu7hJKe6Wc"
     },
 
     {
-       "entropy": "8080808080808080808080808080808080808080808080808080808080808080"
-        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　かき"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "fe78a73be925d9e244c9eabd81c453a5d50731c2aadf7450a04bb45c3830a6c7469814498b0f2085249c6414b5d6b76971b39797275aaaa07892a88667f162cb"
+       "entropy": "8080808080808080808080808080808080808080808080808080808080808080",
+        "phrase": "たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　うのう　たいる　あれ　きたえる　あきる　いのる　こたえる　あたる　かき",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "fe78a73be925d9e244c9eabd81c453a5d50731c2aadf7450a04bb45c3830a6c7469814498b0f2085249c6414b5d6b76971b39797275aaaa07892a88667f162cb",
     "bip32_xprv": "xprv9s21ZrQH143K37B64pNk5VYZCun4eQQxY9Mrv1e5t9HvBHhiExv7Y3JgFWovyqzQgKr9Gcgive47yA9NHZ1Db8dNHN82dTUMwyTsMRZ9aNT"
     },
 
     {
-       "entropy": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　らくたん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "368cd5116f0033665714401fd285cc415d5e7af874b92772bf7ca0691f1f4feb6ae2cad72fcf43acd292b4e3b4bd3ab142b55c720611f3d2ddf8a4c1e24dee08"
+       "entropy": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "phrase": "わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　わじまし　らくたん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "368cd5116f0033665714401fd285cc415d5e7af874b92772bf7ca0691f1f4feb6ae2cad72fcf43acd292b4e3b4bd3ab142b55c720611f3d2ddf8a4c1e24dee08",
     "bip32_xprv": "xprv9s21ZrQH143K3jwRZxCzy7G4D7hzACSptasyZcSZ9hCHEmiGpQRqUNAVbB1TWYM9qp4LCNZmFW7zuMdXRsaRkHhbfDdUprGCdtBrJEkMfgf"
     },
 
     {
-       "entropy": "77c2b00716cec7213839159e404db50d"
-        "phrase": "そむりえ　えり　あせ　けいれき　むさぼる　ちぬり　ほきょう　きふく　てはい　あに　せんし　きおち"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "6df54c81c1d165faff44b9b213467f6e894877b2d070af0d3a4bdbe2fc061a24e7b32e233df1edfeb549793badb4c8cd8a3f6347ecce3c6bfb7831d8dfb0af86"
+       "entropy": "77c2b00716cec7213839159e404db50d",
+        "phrase": "そむりえ　えり　あせ　けいれき　むさぼる　ちぬり　ほきょう　きふく　てはい　あに　せんし　きおち",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "6df54c81c1d165faff44b9b213467f6e894877b2d070af0d3a4bdbe2fc061a24e7b32e233df1edfeb549793badb4c8cd8a3f6347ecce3c6bfb7831d8dfb0af86",
     "bip32_xprv": "xprv9s21ZrQH143K3yTFixz6mhEV2k7J4AgX46epiNxP8pdSwAKR7cx6C4FvFr18MJGqYuiAYxph9NkTV4Knh2XV1L6kky6FtaoWTBVqgJPtMy4"
     },
 
     {
-       "entropy": "b63a9c59a6e641f288ebc103017f1da9f8290b3da6bdef7b"
-        "phrase": "ぬま　ひろう　おけ　さみだれ　すめし　りゆう　ぎむ　そよかぜ　あめ　いわう　はて　じつじ　たさい　たのしみ　らち　ふかい　もんく　ふまん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "ed3e2c8c472004957ca293d88565c0de6c6e4591716040c5153d6bdde27d6ccb1e40db683baaf67c8b25c233d7202f399312d0fd2db8d3d1973f68f194911966"
+       "entropy": "b63a9c59a6e641f288ebc103017f1da9f8290b3da6bdef7b",
+        "phrase": "ぬま　ひろう　おけ　さみだれ　すめし　りゆう　ぎむ　そよかぜ　あめ　いわう　はて　じつじ　たさい　たのしみ　らち　ふかい　もんく　ふまん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "ed3e2c8c472004957ca293d88565c0de6c6e4591716040c5153d6bdde27d6ccb1e40db683baaf67c8b25c233d7202f399312d0fd2db8d3d1973f68f194911966",
     "bip32_xprv": "xprv9s21ZrQH143K2p6Dn7WzWESCYdf9c55fnuDPiSNyfQeCJfks8RPoo9TQvLR468Kbc7x1xrSfv13zMSF7wiAf7jBWsdwo1TYboCXpbSYMZ4L"
     },
 
     {
-       "entropy": "3e141609b97933b66a060dcddc71fad1d91677db872031e85f4c015c5e7e8982"
-        "phrase": "こくご　てんかい　たこやき　そうりょ　ちる　ふへん　とる　はいせん　ひえる　ほっさ　たいひ　とうむぎ　ちみどろ　こうそう　せんそう　ほる　けつえき　こふう　ひめ　あひる　はっくつ　こしつ　くいず　さんざん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "92dcd3a78e2ce37f4e683bb6dcc31c521e10f3ffd3b1581d20bb9d1022d420f770e01d394981a645cb6327b10b6e1c8f5685408af0269f1641203c00dab9d062"
+       "entropy": "3e141609b97933b66a060dcddc71fad1d91677db872031e85f4c015c5e7e8982",
+        "phrase": "こくご　てんかい　たこやき　そうりょ　ちる　ふへん　とる　はいせん　ひえる　ほっさ　たいひ　とうむぎ　ちみどろ　こうそう　せんそう　ほる　けつえき　こふう　ひめ　あひる　はっくつ　こしつ　くいず　さんざん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "92dcd3a78e2ce37f4e683bb6dcc31c521e10f3ffd3b1581d20bb9d1022d420f770e01d394981a645cb6327b10b6e1c8f5685408af0269f1641203c00dab9d062",
     "bip32_xprv": "xprv9s21ZrQH143K3sskJor7QvNmd9TBTpPu5ZV9YU5hox6ERQp47nqm3YdpN66Dq8k6NAifFmrJLZ7hetSMXE5rs32oBFLy7UTMbnKNttS6y2Y"
     },
 
     {
-       "entropy": "0460ef47585604c5660618db2e6a7e7f"
-        "phrase": "いう　いない　ひなん　にっしょく　すこし　ずひょう　つみ　はかる　ふへん　そかい　てらす　ろてん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "6356cc6f6430db45232e1fa97d396ff51238a41afd7d6c3fa952fbe5c766a0fbb5b067b0ba2a02cc65228c0b41adaaa4d74a01a8082c752e78b2d676ca1aec0e"
+       "entropy": "0460ef47585604c5660618db2e6a7e7f",
+        "phrase": "いう　いない　ひなん　にっしょく　すこし　ずひょう　つみ　はかる　ふへん　そかい　てらす　ろてん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "6356cc6f6430db45232e1fa97d396ff51238a41afd7d6c3fa952fbe5c766a0fbb5b067b0ba2a02cc65228c0b41adaaa4d74a01a8082c752e78b2d676ca1aec0e",
     "bip32_xprv": "xprv9s21ZrQH143K4JM9dfsZHaYdSgHdqMojaQB4NC9HN1yBb5vzbs749xJQrdw2SsCQjtG5wED7Ewsk5idxyoRu88uW3gcm5rpFAPieqMebzeX"
     },
 
     {
-       "entropy": "72f60ebac5dd8add8d2a25a797102c3ce21bc029c200076f"
-        "phrase": "そうりょ　にっこう　にくしみ　たんとう　ふじみ　せんてい　けみかる　こもん　どま　ねつい　いる　ぞんび　きぬごし　へんたい　とばす　こそだて　いない　たいまつばな"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "caaefdceadba1de33b78e95614ad8081d03033c47f9eafbf178fb9fb0de41e0d209e37c2906443c5e351f1e609e5d5d3aed8ec0b6848ca7b2d6cc3566c0d41e6"
+       "entropy": "72f60ebac5dd8add8d2a25a797102c3ce21bc029c200076f",
+        "phrase": "そうりょ　にっこう　にくしみ　たんとう　ふじみ　せんてい　けみかる　こもん　どま　ねつい　いる　ぞんび　きぬごし　へんたい　とばす　こそだて　いない　たいまつばな",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "caaefdceadba1de33b78e95614ad8081d03033c47f9eafbf178fb9fb0de41e0d209e37c2906443c5e351f1e609e5d5d3aed8ec0b6848ca7b2d6cc3566c0d41e6",
     "bip32_xprv": "xprv9s21ZrQH143K2JZ9Jxfpf6RARXuAszaSdoXF8hnTWHT2LN6DzuNVzF1pxYsZ249beA24MgFbYMx38WdwJALR44uQLUhkoouad22nTv49sxw"
     },
 
     {
-       "entropy": "2c85efc7f24ee4573d2b81a6ec66cee209b2dcbd09d8eddc51e0215b0b68e416"
-        "phrase": "くわしい　げこう　ゆたか　ほんしつ　むりょう　くむ　よめ　せんもん　とのさま　すべて　にんしき　はさん　ていたい　せんち　よてい　こうかん　むやみ　ほせい　そもそも　ごび　にっしょく　にんち　ちてん　へきが"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "76ed7eb67d77a17ffe2a9c048007bcc9964f8113af6fc80632bb1bd95181eef4ba697660635f148609faa10fc6f2c3adfa93f08a30f81e691d916c010211dbb6"
+       "entropy": "2c85efc7f24ee4573d2b81a6ec66cee209b2dcbd09d8eddc51e0215b0b68e416",
+        "phrase": "くわしい　げこう　ゆたか　ほんしつ　むりょう　くむ　よめ　せんもん　とのさま　すべて　にんしき　はさん　ていたい　せんち　よてい　こうかん　むやみ　ほせい　そもそも　ごび　にっしょく　にんち　ちてん　へきが",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "76ed7eb67d77a17ffe2a9c048007bcc9964f8113af6fc80632bb1bd95181eef4ba697660635f148609faa10fc6f2c3adfa93f08a30f81e691d916c010211dbb6",
     "bip32_xprv": "xprv9s21ZrQH143K4AyJh1ZcTH1mnrRSvEoTRDY1TtTv2Vt1jesaS2RRRpcPNKzQxqCGwKCNyzp84uRhcm7LemHP1sJjZPXU6azjGtTp1vZ77yX"
     },
 
     {
-       "entropy": "eaebabb2383351fd31d703840b32e9e2"
-        "phrase": "みみ　しょもつ　むし　せんゆう　けもの　ろくが　はっぽう　ほうほう　だっきゃく　しゃけん　ねわざ　はっか"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "5ca1e97af1c8340e94bc20f230111621e653219f70ee2faed71f353e1d2e2890d173b2c2f2bbe0a37b52eb81ffbe46b4467b375340590d6434b3b03d2d1aac24"
+       "entropy": "eaebabb2383351fd31d703840b32e9e2",
+        "phrase": "みみ　しょもつ　むし　せんゆう　けもの　ろくが　はっぽう　ほうほう　だっきゃく　しゃけん　ねわざ　はっか",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "5ca1e97af1c8340e94bc20f230111621e653219f70ee2faed71f353e1d2e2890d173b2c2f2bbe0a37b52eb81ffbe46b4467b375340590d6434b3b03d2d1aac24",
     "bip32_xprv": "xprv9s21ZrQH143K2UgArhsTrcu194VTw4PEsms62eaNxgcRGtAo8kXz2zG2Pt4fD4v5X5wirr6sDtHxQkX2YXFgHEujnx97oxNg6UBeq2EJ5oM"
     },
 
     {
-       "entropy": "7ac45cfe7722ee6c7ba84fbc2d5bd61b45cb2fe5eb65aa78"
-        "phrase": "だいおう　きほう　こすう　むりょう　げきちん　けんか　もうどうけん　いや　ねんまく　せはば　らくご　けんきょ　しょうじき　つまる　つま　せんく　なたでここ　はき"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "bf2d78761e41bfcd3d2cca8dadf42484f5a459bf68b876a8b6a971b8d8f1c039c828984d9c205259a9e408dc6fd8182f9cc95653883785dc15f4c4326515f729"
+       "entropy": "7ac45cfe7722ee6c7ba84fbc2d5bd61b45cb2fe5eb65aa78",
+        "phrase": "だいおう　きほう　こすう　むりょう　げきちん　けんか　もうどうけん　いや　ねんまく　せはば　らくご　けんきょ　しょうじき　つまる　つま　せんく　なたでここ　はき",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "bf2d78761e41bfcd3d2cca8dadf42484f5a459bf68b876a8b6a971b8d8f1c039c828984d9c205259a9e408dc6fd8182f9cc95653883785dc15f4c4326515f729",
     "bip32_xprv": "xprv9s21ZrQH143K3S19TVm9iG7k2LKsam59uxs9ptpD1zBCNoziMgVexJi7WCUfzrp6MPhdz3H7qcoUAzAbiDuLuQmv9xKKBGRbcGKaXM5aRWx"
     },
 
     {
-       "entropy": "4fa1a8bc3e6d80ee1316050e862c1812031493212b7ec3f3bb1b08f168cabeef"
-        "phrase": "さんきゃく　うけつけ　げきど　たいしょく　ふくざつ　そぼ　さといも　はいけん　うすぎ　けちらす　いす　きめる　けちゃっぷ　さうな　たて　せんむ　はさみ　でぬかえ　はっちゃく　うるさい　おこる　すろっと　れいかん　まかい"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "1bd4647f2cf34af5bd6d8b1353450beccf223b60ea964574dd6544aa1bdcd80f7d7986a425cb6754c146c14d8d875ae37759aa400837fa90234bb940afe992fd"
+       "entropy": "4fa1a8bc3e6d80ee1316050e862c1812031493212b7ec3f3bb1b08f168cabeef",
+        "phrase": "さんきゃく　うけつけ　げきど　たいしょく　ふくざつ　そぼ　さといも　はいけん　うすぎ　けちらす　いす　きめる　けちゃっぷ　さうな　たて　せんむ　はさみ　でぬかえ　はっちゃく　うるさい　おこる　すろっと　れいかん　まかい",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "1bd4647f2cf34af5bd6d8b1353450beccf223b60ea964574dd6544aa1bdcd80f7d7986a425cb6754c146c14d8d875ae37759aa400837fa90234bb940afe992fd",
     "bip32_xprv": "xprv9s21ZrQH143K4XqhNuUG4WZZyA6gjKCgxesQDta3cNz7FXgdwueeg6ME762oBBbvS91q12aJYLSECTaDecfUwWK4ncKDP8kJFxX7A7cufiH"
     },
 
     {
-       "entropy": "18ab19a9f54a9274f03e5209a2ac8a91"
-        "phrase": "かに　しゃうん　せと　みねらる　ないそう　こいびと　はいこう　はんえん　いもたれ　えらぶ　きふく　きむずかしい"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "8a02b7612d1c4add11b13fd6fd48a6abc73071873533e24c41a703860510dc69e0f266caa03e0171697cfe84bf14262c7f98246c0a6b6e0dc9b85ea36b88ce06"
+       "entropy": "18ab19a9f54a9274f03e5209a2ac8a91",
+        "phrase": "かに　しゃうん　せと　みねらる　ないそう　こいびと　はいこう　はんえん　いもたれ　えらぶ　きふく　きむずかしい",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "8a02b7612d1c4add11b13fd6fd48a6abc73071873533e24c41a703860510dc69e0f266caa03e0171697cfe84bf14262c7f98246c0a6b6e0dc9b85ea36b88ce06",
     "bip32_xprv": "xprv9s21ZrQH143K436STRfT6p4Xwq18UWP1ysJ96UQGbvCfYxVg27TkhTbQSzbop8cHa7fNyGNRKMccr5qMFdueqgVU11XApmR5WNbUU8iFZpq"
     },
 
     {
-       "entropy": "18a2e1d81b8ecfb2a333adcb0c17a5b9eb76cc5d05db91a4"
-        "phrase": "かに　かあつ　そと　けんこう　むせる　ふた　だんろ　そっせん　はんこう　すずしい　みこん　そこう　ねぐせ　せいかつ　そざい　ねんし　ちゅうい　くさい"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "e0a9c1d4a7d56ff4e837b12519044a6ca406fae310dd0562fa04e1a264bd1b3b51e1f62301e3a70f6315034212ff9ae769ba1384ee4ca28ac6e1a01c3b504c45"
+       "entropy": "18a2e1d81b8ecfb2a333adcb0c17a5b9eb76cc5d05db91a4",
+        "phrase": "かに　かあつ　そと　けんこう　むせる　ふた　だんろ　そっせん　はんこう　すずしい　みこん　そこう　ねぐせ　せいかつ　そざい　ねんし　ちゅうい　くさい",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "e0a9c1d4a7d56ff4e837b12519044a6ca406fae310dd0562fa04e1a264bd1b3b51e1f62301e3a70f6315034212ff9ae769ba1384ee4ca28ac6e1a01c3b504c45",
     "bip32_xprv": "xprv9s21ZrQH143K3CoBMHQRH2jwWEX6FBAAWVmUtjwDa5TMbzAJoAi3cX52grKNHZxvHgCGzXzFYxQoEnGqAUWNnZPnHVDHFqRidQVaPDQJqeD"
     },
 
     {
-       "entropy": "15da872c95a13dd738fbf50e427583ad61f18fd99f628c417a61cf8343c90419"
-        "phrase": "える　ひらく　はんしゃ　くみあわせ　えしゃく　みる　ほめる　たいひ　うしろがみ　えさ　すそ　しゃっきん　きせき　はにかむ　せかい　むこ　たんぴん　いわ　つめたい　てまきずし　げひん　ほんしつ　うま　けいけん"
-          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色"
-          "seed": "e015397184890cdacffbf85b61fbd7811d3500be869df9072e5fdb517fc25f1f15549dfbc7841afcd5e4087dfe6801bef6a1e9c10d1ec6125f446ff7a4e7fcb0"
+       "entropy": "15da872c95a13dd738fbf50e427583ad61f18fd99f628c417a61cf8343c90419",
+        "phrase": "える　ひらく　はんしゃ　くみあわせ　えしゃく　みる　ほめる　たいひ　うしろがみ　えさ　すそ　しゃっきん　きせき　はにかむ　せかい　むこ　たんぴん　いわ　つめたい　てまきずし　げひん　ほんしつ　うま　けいけん",
+          "salt": "㍍ガバヴァぱばぐゞちぢ十人十色",
+          "seed": "e015397184890cdacffbf85b61fbd7811d3500be869df9072e5fdb517fc25f1f15549dfbc7841afcd5e4087dfe6801bef6a1e9c10d1ec6125f446ff7a4e7fcb0",
     "bip32_xprv": "xprv9s21ZrQH143K4CERh2pwfhWvDtpTgJM45RXe18whZB9rbJhVqeHS5efRue4wHn3q3MX4GpAZAASumFdGPXmefPBz27uK3cnsQwdQ33yfxT4"
     }
 ]
