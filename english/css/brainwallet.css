@@ -1,0 +1,34 @@
+body {
+  padding-top: 72px;
+  padding-bottom: 32px;
+}
+
+.form-control[disabled], .form-control[readonly] { cursor: auto; }
+
+hidden {
+    display: none;
+}
+
+.col-lg-2 {
+    width: 18%;
+}
+
+.col-lg-offset-2 {
+    margin-left: 18%;
+}
+
+.col-lg-10 {
+    width: 82%;
+}
+
+.col-lg-10-inner {
+    width: 80.5%;
+}
+
+.progress .progress-bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}?
