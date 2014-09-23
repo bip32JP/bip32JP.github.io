@@ -204,7 +204,7 @@
                 return;
             }
         } else {
-            var seed = bip39.generateMnemonic();
+            var seed = bip39.generateMnemonic(($("input[name='wordcnt']:checked").val()/3)*32);
         }
         var seed_pw = $("#bip39_passphrase").val();
         seed_pw = seed_pw.normalize("NFKD");
@@ -230,6 +230,8 @@
         if(base==20&&words==24&& !/^[A-Ja-j0-9]{60}$/.test(dice_rolls) ){alert("Entropy incorrect\nPlease use 60 digits of 0-9, A-J");raise;};
         if(base==16&&words==12&& !/^[A-Fa-f0-9]{32}$/.test(dice_rolls) ){alert("Entropy incorrect\nPlease use 32 digits of 0-9, A-F");raise;};
         if(base==16&&words==24&& !/^[A-Fa-f0-9]{64}$/.test(dice_rolls) ){alert("Entropy incorrect\nPlease use 64 digits of 0-9, A-F");raise;};
+        if(base==2&&words==12&& !/^[0-1]{128}$/.test(dice_rolls) ){alert("Entropy incorrect\nPlease use 128 digits of 0-1");raise;};
+        if(base==2&&words==24&& !/^[0-1]{256}$/.test(dice_rolls) ){alert("Entropy incorrect\nPlease use 256 digits of 0-1");raise;};
         
         if(base!=16){
             var bit128 = new BigInteger("100000000000000000000000000000000", 16);

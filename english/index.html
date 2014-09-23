@@ -93,18 +93,13 @@
                       </div>
                       <p />
                       <form onsubmit="return false;">
+                          <input type="radio" name="base" id="ent_base" value=2 checked/> Base 2 (0-1) (For 2-sided coin)
                           <input type="radio" name="base" id="ent_base" value=6 checked/> Base 6 (0-5) (For 6-sided dice)
                           <input type="radio" name="base" id="ent_base" value=16 /> Base 16 (0-9,A-F) (For 16-sided dice)
                           <input type="radio" name="base" id="ent_base" value=20 /> Base 20 (0-9,A-J) (For 20-sided dice)
                       </form>
-                      <p />
-                      <form onsubmit="return false;">
-                          <input type="radio" name="wordcnt" id="wordcnt_id" value=12 checked/> 12 words (need >128 bits of Entropy)
-                          <input type="radio" name="wordcnt" id="wordcnt_id" value=24 /> 24 words (need >256 bits of Entropy)
-                      </form>
                     </div>
                   </div>
-                  <p />
                 </div>
               </div>
               <div class="form-group">
@@ -118,6 +113,11 @@
                           <input type="checkbox" id="checkbox_change_language" checked /> English Phrase
                         </div>
                       </div>
+                      <p />
+                      <form onsubmit="return false;">
+                          <input type="radio" name="wordcnt" id="wordcnt_id" value=12 checked/> 12 words (need >128 bits of Entropy)
+                          <input type="radio" name="wordcnt" id="wordcnt_id" value=24 /> 24 words (need >256 bits of Entropy)
+                      </form>
                     </div>
                   </div>
                   <p />
