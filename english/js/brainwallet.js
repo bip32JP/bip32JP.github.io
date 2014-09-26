@@ -630,8 +630,8 @@
         $('#gen_from label input').on('change', onUpdateGenFrom );
         updateGenFrom();
 
-        $("#bip32_source_passphrase").val("apologize silver repeat avoid letter screen understand grass horrible stream pure pulse");
-        $("#bip32_source_key").val("xprv9s21ZrQH143K2V5pRoQvvXgcEVAUU12DK2cjAZjH8DzAKMjp3wTSoiSkhmxHftvNxT2yoqQMTGYhA9sXWAQF7hQZCkpfWaJNw1Jzxc8isyC");
+        $("#bip32_source_passphrase").val("awake book subject inch gentle blur grant damage process float month clown");
+        $("#bip32_source_key").val("xprv9s21ZrQH143K4KqQx9Zrf1eN8EaPQVFxM2Ast8mdHn7GKiDWzNEyNdduJhWXToy8MpkGcKjxeFWd8oBSvsz4PCYamxR7TX49pSpp3bmHVAY");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
         onInput("#bip39_passphrase", onUpdateSourcePassphrase);
         
