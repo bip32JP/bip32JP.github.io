@@ -106,11 +106,7 @@ function checksumBits(entropyBuffer) {
 }
 
 function salt(password) {
-  return encode_utf8('mnemonic' + (password || ''))
-}
-
-function encode_utf8(s) {
-  return unescape(encodeURIComponent(s))
+  return 'mnemonic' + (password || '')
 }
 
 //=========== helper methods from bitcoinjs-lib ========
