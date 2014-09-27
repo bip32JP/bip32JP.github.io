@@ -97,6 +97,31 @@
         }
     };
 
+    entropy_array = ["00000000000000000000000000000000",
+                     "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+                     "80808080808080808080808080808080",
+                     "ffffffffffffffffffffffffffffffff",
+                     "000000000000000000000000000000000000000000000000",
+                     "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+                     "808080808080808080808080808080808080808080808080",
+                     "ffffffffffffffffffffffffffffffffffffffffffffffff",
+                     "0000000000000000000000000000000000000000000000000000000000000000",
+                     "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+                     "8080808080808080808080808080808080808080808080808080808080808080",
+                     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                     "77c2b00716cec7213839159e404db50d",
+                     "b63a9c59a6e641f288ebc103017f1da9f8290b3da6bdef7b",
+                     "3e141609b97933b66a060dcddc71fad1d91677db872031e85f4c015c5e7e8982",
+                     "0460ef47585604c5660618db2e6a7e7f",
+                     "72f60ebac5dd8add8d2a25a797102c3ce21bc029c200076f",
+                     "2c85efc7f24ee4573d2b81a6ec66cee209b2dcbd09d8eddc51e0215b0b68e416",
+                     "eaebabb2383351fd31d703840b32e9e2",
+                     "7ac45cfe7722ee6c7ba84fbc2d5bd61b45cb2fe5eb65aa78",
+                     "4fa1a8bc3e6d80ee1316050e862c1812031493212b7ec3f3bb1b08f168cabeef",
+                     "18ab19a9f54a9274f03e5209a2ac8a91",
+                     "18a2e1d81b8ecfb2a333adcb0c17a5b9eb76cc5d05db91a4",
+                     "15da872c95a13dd738fbf50e427583ad61f18fd99f628c417a61cf8343c90419"]
+
     var PUBLIC_KEY_VERSION = 0;
     var PRIVATE_KEY_VERSION = 0x80;
     var ADDRESS_URL_PREFIX = ''
@@ -192,6 +217,58 @@
             onCancelHashWorkerClicked();
         }
     }
+
+    function createTestVectors() {
+        var seed
+        var salt
+        var hexseed
+        var xprv
+        
+        console.log( "[" );
+        console.log( "{" );
+        for (var i = 0; i < entropy_array.length; i++) {
+            seed = bip39.entropyToMnemonic(entropy_array[i])
+            salt = "㍍ガバヴァぱばぐゞちぢ十人十色"
+            console.log( "   \"entropy\": \"" + entropy_array[i] + "\"," );
+            console.log( "    \"phrase\": \"" + seed + "\"," );
+            console.log( "      \"salt\": \"" + salt + "\",");
+            seed = seed.normalize('NFKD');
+            salt = salt.normalize('NFKD');
+            hexseed = bip39.mnemonicToSeed(seed, salt);
+            console.log( "      \"seed\": \"" + hexseed + "\",");
+            
+            var hasher = new jsSHA(hexseed, 'HEX');   
+            var I = hasher.getHMAC("Bitcoin seed", "TEXT", "SHA-512", "HEX");
+            var il = Crypto.util.hexToBytes(I.slice(0, 64));
+            var ir = Crypto.util.hexToBytes(I.slice(64, 128));
+
+            var gen_bip32 = new BIP32();
+            try {
+                gen_bip32.eckey = new Bitcoin.ECKey(il);
+                gen_bip32.eckey.pub = gen_bip32.eckey.getPubPoint();
+                gen_bip32.eckey.setCompressed(true);
+                gen_bip32.eckey.pubKeyHash = Bitcoin.Util.sha256ripe160(gen_bip32.eckey.pub.getEncoded(true));
+                gen_bip32.has_private_key = true;
+
+                gen_bip32.chain_code = ir;
+                gen_bip32.child_index = 0;
+                gen_bip32.parent_fingerprint = Bitcoin.Util.hexToBytes("00000000");
+                gen_bip32.version = COINS[coin].bip32_private;
+                gen_bip32.depth = 0;
+
+                gen_bip32.build_extended_public_key();
+                gen_bip32.build_extended_private_key();
+            } catch (err) {
+                return;
+            }
+
+            xprv = gen_bip32.extended_private_key_string("base58")
+            console.log( "\"bip32_xprv\": \"" + xprv + "\"");
+            console.log( "}," );
+            console.log( "" );
+            console.log( "{" );
+        }
+    };
 
     function onCancelHashWorkerClicked() {
         //stop_hash_worker();
@@ -639,7 +716,7 @@
 
         $("#checkbox_change_language").on('change', onLanguageChanged );
 
-        $("#cancel_hash_worker").on('click', onCancelHashWorkerClicked);
+        $("#cancel_hash_worker").on('click', onCancelHashWorkerClicked); // createTestVectors to generate vectors in console
         onInput("#bip32_source_key", onUpdateSourceKey);
         $("#bip32_hashing_progress_bar").width('100%');
         $("#cancel_hash_worker").attr('disabled', false);
