@@ -161,7 +161,7 @@
         if( gen_from == 'pass' ) {
             $("#bip32_source_passphrase").attr('readonly', false);
             $("#bip39_passphrase").attr('readonly', false);
-            $("#bip32_source_key").attr('readonly', true);
+            $("#bip32_source_key").attr('readonly', false);
             $("#cancel_hash_worker").attr('disabled', false);
             $("#gen_from_msg").html("Enter a Phrase to generate a BIP32 Wallet.");
         } else {
