@@ -575,8 +575,8 @@
         $('#gen_from label input').on('change', onUpdateGenFrom );
         updateGenFrom();
 
-        $("#bip32_source_passphrase").val("さんさい　みうち　はそん　だっかい　おやゆび　けんすう　へび　ごさ　こんしゅん　のれん　きくばり　とつにゅう");
-        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma98eEJRafud4QAA36sfvCRpBDopPrmoXVD92tugSp879NsNzBJg8dYzGUuNJfH9bChFNNSx8HF1pvzBZDt7k8dStYTKo8bof");
+        $("#bip32_source_passphrase").val("はんい　しねん　いこく　りりく　らしんばん　ととのえる　つうはん　せんぱい　たえる　はけん　じだい　うせつ");
+        $("#bip32_source_key").val("Mnpv3aDAjprQ2Rma8mKZdEML4MjkjSTeDYUTiM2DUX5g3cGrQbxT7MUXsGNtcjmU6mRbVB4N2ut4U6JEHhwM3wnjkDJETL95CkKWmr3eF6ZGjop");
         onInput("#bip32_source_passphrase", onUpdateSourcePassphrase);
         onInput("#bip39_passphrase", onUpdateSourcePassphrase);
 

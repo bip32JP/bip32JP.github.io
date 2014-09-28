@@ -264,9 +264,14 @@
 
             xprv = gen_bip32.extended_private_key_string("base58")
             console.log( "\"bip32_xprv\": \"" + xprv + "\"");
-            console.log( "}," );
-            console.log( "" );
-            console.log( "{" );
+            if (i != entropy_array.length - 1) {
+                console.log( "}," );
+                console.log( "" );
+                console.log( "{" );
+            } else {
+                console.log( "}" );
+                console.log( "]" );
+            }
         }
     };
 
