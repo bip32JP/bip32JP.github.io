@@ -214,14 +214,11 @@ BIP32.prototype.build_extended_private_key = function() {
 
     // Private key
     this.extended_private_key.push(0);
-    if( this.eckey.priv.toByteArrayUnsigned().length < 32 ) {
-        var i = 32 - this.eckey.priv.toByteArrayUnsigned().length
-        while( i > 0 ) {
-            this.extended_private_key.push(0);
-            i--;
-        }
+    var k = this.eckey.priv.toByteArrayUnsigned();
+    while (k.length < 32) {
+        k.unshift(0);
     }
-    this.extended_private_key = this.extended_private_key.concat(this.eckey.priv.toByteArrayUnsigned());
+    this.extended_private_key = this.extended_private_key.concat(k);
 }
 
 BIP32.prototype.extended_private_key_string = function(format) {
