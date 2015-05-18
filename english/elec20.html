@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BIP32 - JavaScript Deterministic Wallets</title>
+    <meta content="Client-side Bitcoin address and deterministic wallets generator" name="description"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="bitcoin address generator" name="description" />
+    <meta content="brainwallet" name="author" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="../css/brainwallet.css" rel="stylesheet" />
+    <link href="../favicon.ico" rel="shortcut icon" />
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bitcoinjs-min.js"></script>
+    <script src="../js/sha512.js"></script>
+    <script src="../js/modsqrt.js"></script>
+    <script src="../js/qrcode.js"></script>
+    <script src="../js/bip32.js"></script>
+    <script src="../js/bip39.js"></script>
+  </head>
+  Input your xpub here.<input id="xpub"></input><br>
+  Input the number of addresses.<input id="num" value="2"></input>
+  <textarea id="textbox" rows="100" style="width: 100%"></textarea>
+    <script>
+      function onInput(id, func) {
+          $(id).bind("input keyup keydown keypress change blur", function() {
+              if ($(this).val() != jQuery.data(this, "lastvalue")) {
+                  func();
+              }
+              jQuery.data(this, "lastvalue", $(this).val());
+          });
+          $(id).bind("focus", function() {
+             jQuery.data(this, "lastvalue", $(this).val());
+          });
+      };
+      
+      function printaddresses() {
+        if($('#xpub').val().slice(0,4) == 'xpub') {
+          var HD = new BIP32($('#xpub').val());
+          var tempHD = HD
+          var addresses = 'Receive Addresses:\n\n';
+          for(i=0;i<parseInt($('#num').val());i++) {
+            tempHD = HD
+            addresses = addresses + (i+1) + '. ' + tempHD.derive('m/0/' + i).eckey.getBitcoinAddress().toString() + '\n'
+          };
+          addresses = addresses + '\nChange Addresses:\n\n';
+          for(i=0;i<parseInt($('#num').val());i++) {
+            tempHD = HD
+            addresses = addresses + (i+1) + '. ' + tempHD.derive('m/1/' + i).eckey.getBitcoinAddress().toString() + '\n'
+          };
+          $('#textbox').val(addresses);
+        }};
+      
+      onInput('#xpub', printaddresses);
+    </script>
+  </body>
+</html>
+
