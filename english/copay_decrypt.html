@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Decrypt Copay wallet backups</title>
+    <meta content="Decrypt Copay wallet backups" name="description"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="../css/brainwallet.css" rel="stylesheet" />
+    <link href="../favicon.ico" rel="shortcut icon" />
+    <script src="../js/jquery.js"></script>
+    <script src="../js/sjcl.js"></script>
+  </head>
+  Input your backup json here.<input id="wallet"></input><br>
+  Input the password<input type="password" id="pass"></input><br>
+  <button id="start" onclick="decrypt()" class="btn btn-default">Decrypt</button>
+  <textarea id="textbox" rows="100" style="width: 100%"></textarea>
+    <script>
+      function decrypt() {
+          var jsotxt = $("#wallet").val();
+          var passw = $("#pass").val();
+          var plain = sjcl.decrypt(passw,jsotxt)
+          var jsobj = jQuery.parseJSON( plain );
+          var xprv = jsobj.xPrivKey;
+          $("#textbox").val('Here\'s your xprv:\n' + xprv + '\n\nAnd here\'s your whole decrypted wallet:\n' + plain);
+      };
+    </script>
+  </body>
+</html>
+
