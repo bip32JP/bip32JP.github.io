@@ -185,7 +185,7 @@
       }});
       
       if (datas.length == 0){
-          $("#gemsphrase").html(parseInt($("#skipme").html()) + 20);
+          $("#skipme").html(parseInt($("#skipme").html()) + 20);
           $("#offcount").html(" Offset = " + $("#skipme").html());
           alert('No unspent bitcoins');
           return;
@@ -272,7 +272,7 @@
           },
           success: function(result){
               $("#results").html("Sent transaction (id):<br>" + result.txid);
-              $("#gemsphrase").html(parseInt($("#skipme").html()) + 20);
+              $("#skipme").html(parseInt($("#skipme").html()) + 20);
               $("#offcount").html(" Offset = " + $("#skipme").html());
       }});
       
