@@ -344,10 +344,7 @@
         $("#bip32_key_info_chain_code").val('' + byteArrayToHexString(bip32_source_key.chain_code));
 
         if( bip32_source_key.has_private_key ) {
-            var bytes = [key_coin.private_prefix].concat(bip32_source_key.eckey.priv.toByteArrayUnsigned()).concat([1]);
-            var checksum = Crypto.SHA256(Crypto.SHA256(bytes, {asBytes: true}), {asBytes: true}).slice(0, 4);
-            $("#bip32_key_info_key").val(Bitcoin.Base58.encode(bytes.concat(checksum)));
-
+            $("#bip32_key_info_key").val(Crypto.util.bytesToHex(bip32_source_key.eckey.priv.toByteArrayUnsigned()));
         } else {
             var bytes = Crypto.util.bytesToHex(bip32_source_key.eckey.pub.getEncoded(true));
             $("#bip32_key_info_key").val(bytes);
