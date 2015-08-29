@@ -16,7 +16,7 @@
     <script src="../js/bip32.js"></script>
   </head>
   Input your backup json here. <input id="wallet"></input><br>
-  Enter the number of addresses you want to show here. <input id="num" value="3"></input> (Can be 0 for no addresses)<br>
+  Enter the number of addresses you want to show here. <input id="num" value="3"></input> (Can be 0 for no addresses) <input type="checkbox" id="show_other" checked /> Show redeemscript + private keys if present.<br>
   Input the password <input type="password" id="pass"></input><br>
   <button id="start" onclick="decrypt()" class="btn btn-default">Decrypt</button>
   <textarea id="textbox" rows="100" style="width: 100%"></textarea>
@@ -59,6 +59,12 @@
           };
           var jsobj = jQuery.parseJSON( plain );
           var xprv = jsobj.xPrivKey;
+          
+          var xprvobj;
+          if (xprv) {
+              xprvobj = bitcoin.HDNode.fromBase58(xprv);
+          };
+          
           var n = jsobj.n
           var m = jsobj.m
           var xpubs = [];
@@ -76,6 +82,11 @@
               xpubchanges.push(xpubobjs[i].derive(2147483647).derive(1));
           };
           
+          if (xprv) {
+              var xprvreceives = xprvobj.deriveHardened(45).derive(2147483647).derive(0);
+              var xprvchanges = xprvobj.deriveHardened(45).derive(2147483647).derive(1);
+          };
+          
           var receives = [];
           for (var i = 0; i < count; i++) {
               var pubs = [];
@@ -86,10 +97,22 @@
               for (var j = 0; j < n; j++) {
                   pubs[j] = bitcoin.ECPubKey.fromHex(pubs[j]);
               };
-              var add_script = bitcoin.scripts.multisigOutput(m, pubs).getHash();
+              if (xprv) {
+                  var WIFpriv = xprvreceives.derive(i).privKey.toWIF();
+              };
+              var redeem_script = bitcoin.scripts.multisigOutput(m, pubs);
+              var add_script = redeem_script.getHash();
               var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
               var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
-              receives.push(address);
+              if ($("#show_other").is(":checked")) {
+                  if (xprv) {
+                      receives.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\",\n\"WIFprivateKey\":\"" + WIFpriv + "\"}");
+                  } else {
+                      receives.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\"}");
+                  };
+              } else {
+                  receives.push("\"" + address + "\"");
+              };
           };
           
           var changes = [];
@@ -102,15 +125,27 @@
               for (var j = 0; j < n; j++) {
                   pubs[j] = bitcoin.ECPubKey.fromHex(pubs[j]);
               };
-              var add_script = bitcoin.scripts.multisigOutput(m, pubs).getHash();
+              if (xprv) {
+                  var WIFpriv = xprvchanges.derive(i).privKey.toWIF();
+              };
+              var redeem_script = bitcoin.scripts.multisigOutput(m, pubs);
+              var add_script = redeem_script.getHash();
               var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
               var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
-              changes.push(address);
+              if ($("#show_other").is(":checked")) {
+                  if (xprv) {
+                      changes.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\",\n\"WIFprivateKey\":\"" + WIFpriv + "\"}");
+                  } else {
+                      changes.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\"}");
+                  };
+              } else {
+                  changes.push("\"" + address + "\"");
+              };
           };
           
           var message = "Here's your whole decrypted wallet:\n" + plain.replace(/([\[,])([{"])/g, "$1\n$2");
-          message += "\n\nAnd here's the first " + count + " Receive Addresses in your wallet.\n[\"" + receives.join("\",\n\"") + "\"]"
-          message += "\n\nAnd here's the first " + count + " Change Addresses in your wallet.\n[\"" + changes.join("\",\n\"") + "\"]"
+          message += "\n\nAnd here's the first " + count + " Receive Addresses in your wallet.\n[" + receives.join(",\n") + "]"
+          message += "\n\nAnd here's the first " + count + " Change Addresses in your wallet.\n[" + changes.join(",\n") + "]"
           
           $("#textbox").val(message);
       };
