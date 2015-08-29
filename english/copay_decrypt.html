@@ -69,11 +69,18 @@
               xpubobjs.push(bitcoin.HDNode.fromBase58(xpubs[i]));
           };
           
+          var xpubreceives = [];
+          var xpubchanges = [];
+          for (var i = 0; i < n; i++) {
+              xpubreceives.push(xpubobjs[i].derive(2147483647).derive(0));
+              xpubchanges.push(xpubobjs[i].derive(2147483647).derive(1));
+          };
+          
           var receives = [];
           for (var i = 0; i < count; i++) {
               var pubs = [];
               for (var j = 0; j < n; j++) {
-                  pubs.push(xpubobjs[j].derive(2147483647).derive(0).derive(i).pubKey.toHex());
+                  pubs.push(xpubreceives[j].derive(i).pubKey.toHex());
               };
               pubs.sort();
               for (var j = 0; j < n; j++) {
@@ -89,7 +96,7 @@
           for (var i = 0; i < count; i++) {
               var pubs = [];
               for (var j = 0; j < n; j++) {
-                  pubs.push(xpubobjs[j].derive(2147483647).derive(1).derive(i).pubKey.toHex());
+                  pubs.push(xpubchanges[j].derive(i).pubKey.toHex());
               };
               pubs.sort();
               for (var j = 0; j < n; j++) {
