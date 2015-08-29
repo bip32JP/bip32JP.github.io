@@ -11,21 +11,106 @@
     <link href="../favicon.ico" rel="shortcut icon" />
     <script src="../js/jquery.js"></script>
     <script src="../js/sjcl.js"></script>
+    <script src="../js/bitcoinjs1-5-7.js"></script>
+    <script src="../js/sha512.js"></script>
+    <script src="../js/bip32.js"></script>
   </head>
-  Input your backup json here.<input id="wallet"></input><br>
-  Input the password<input type="password" id="pass"></input><br>
+  Input your backup json here. <input id="wallet"></input><br>
+  Enter the number of addresses you want to show here. <input id="num" value="3"></input> (Can be 0 for no addresses)<br>
+  Input the password <input type="password" id="pass"></input><br>
   <button id="start" onclick="decrypt()" class="btn btn-default">Decrypt</button>
   <textarea id="textbox" rows="100" style="width: 100%"></textarea>
     <script>
       function decrypt() {
           var jsotxt = $("#wallet").val();
           var passw = $("#pass").val();
-          var plain = sjcl.decrypt(passw,jsotxt)
+          var count = $("#num").val();
+          
+          if (jsotxt == "" || passw == "" || count == "") {
+              $("#textbox").val("Please Enter values for all entry boxes.");
+              return;
+          };
+          
+          if (!isInt(count) || count < 0) {
+              $("#textbox").val("Please Enter a positive integer value for the number of addresses. (Can be 0)");
+              return;
+          };
+          
+          try {
+              jQuery.parseJSON( jsotxt );
+          } catch(e) {
+              $("#textbox").val("Your JSON is not valid, please copy only the text within (and including) the { } brackets around it.");
+              return;
+          };
+          
+          var warning = "Generating more than 50 addresses (with change addresses) will take a while.\nIf you'd like to continue anyways,\nclick the button one more time.";
+          if (count > 50 && $("#textbox").val() != warning) {
+              $("#textbox").val(warning);
+              return;
+          };
+          $("#textbox").val("");
+          
+          var plain;
+          try {
+              plain = sjcl.decrypt(passw, jsotxt);
+          } catch(e) {
+              $("#textbox").val("Seems like your password is incorrect. Try again.");
+              return;
+          };
           var jsobj = jQuery.parseJSON( plain );
           var xprv = jsobj.xPrivKey;
-          $("#textbox").val('Here\'s your xprv:\n' + xprv + '\n\nAnd here\'s your whole decrypted wallet:\n' + plain);
+          var n = jsobj.n
+          var m = jsobj.m
+          var xpubs = [];
+          var xpubobjs = [];
+          
+          for (var i = 0; i < n; i++) {
+              xpubs.push(jsobj.publicKeyRing[i].xPubKey);
+              xpubobjs.push(bitcoin.HDNode.fromBase58(xpubs[i]));
+          };
+          
+          var receives = [];
+          for (var i = 0; i < count; i++) {
+              var pubs = [];
+              for (var j = 0; j < n; j++) {
+                  pubs.push(xpubobjs[j].derive(2147483647).derive(0).derive(i).pubKey.toHex());
+              };
+              pubs.sort();
+              for (var j = 0; j < n; j++) {
+                  pubs[j] = bitcoin.ECPubKey.fromHex(pubs[j]);
+              };
+              var add_script = bitcoin.scripts.multisigOutput(m, pubs).getHash();
+              var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
+              var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
+              receives.push(address);
+          };
+          
+          var changes = [];
+          for (var i = 0; i < count; i++) {
+              var pubs = [];
+              for (var j = 0; j < n; j++) {
+                  pubs.push(xpubobjs[j].derive(2147483647).derive(1).derive(i).pubKey.toHex());
+              };
+              pubs.sort();
+              for (var j = 0; j < n; j++) {
+                  pubs[j] = bitcoin.ECPubKey.fromHex(pubs[j]);
+              };
+              var add_script = bitcoin.scripts.multisigOutput(m, pubs).getHash();
+              var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
+              var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
+              changes.push(address);
+          };
+          
+          var message = "Here's your whole decrypted wallet:\n" + plain.replace(/([\[,])([{"])/g, "$1\n$2");
+          message += "\n\nAnd here's the first " + count + " Receive Addresses in your wallet.\n[\"" + receives.join("\",\n\"") + "\"]"
+          message += "\n\nAnd here's the first " + count + " Change Addresses in your wallet.\n[\"" + changes.join("\",\n\"") + "\"]"
+          
+          $("#textbox").val(message);
+      };
+      function isInt(value) {
+        var x;
+        return isNaN(value) ? !1 : (x = parseFloat(value), (0 | x) === x);
       };
     </script>
   </body>
 </html>
-
