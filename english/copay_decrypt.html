@@ -16,7 +16,7 @@
     <script src="../js/bip32.js"></script>
   </head>
   Input your backup json here. <input id="wallet"></input><br>
-  Enter the number of addresses you want to show here. <input id="num" value="3"></input> (Can be 0 for no addresses) <input type="checkbox" id="show_other" checked /> Show redeemscript + private keys if present.<br>
+  Enter the number of addresses you want to show here. <input id="num" value="3"></input> (Can be 0 for no addresses)<br>
   Input the password <input type="password" id="pass"></input><br>
   <button id="start" onclick="decrypt()" class="btn btn-default">Decrypt</button>
   <textarea id="textbox" rows="100" style="width: 100%"></textarea>
@@ -87,7 +87,11 @@
               var xprvchanges = xprvobj.deriveHardened(45).derive(2147483647).derive(1);
           };
           
-          var receives = [];
+          // used for address objects
+          var addresses = [];
+          // used for address list
+          var address_list = [];
+          
           for (var i = 0; i < count; i++) {
               var pubs = [];
               for (var j = 0; j < n; j++) {
@@ -104,18 +108,16 @@
               var add_script = redeem_script.getHash();
               var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
               var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
-              if ($("#show_other").is(":checked")) {
-                  if (xprv) {
-                      receives.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\",\n\"WIFprivateKey\":\"" + WIFpriv + "\"}");
-                  } else {
-                      receives.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\"}");
-                  };
-              } else {
-                  receives.push("\"" + address + "\"");
-              };
+              var obj = {};
+              obj.index = i;
+              obj.address = address;
+              obj.redeemscript = redeem_script.toHex();
+              obj.is_change = false;
+              if (xprv) obj.WIFprivateKey = WIFpriv;
+              addresses.push(obj);
+              address_list.push(address);
           };
           
-          var changes = [];
           for (var i = 0; i < count; i++) {
               var pubs = [];
               for (var j = 0; j < n; j++) {
@@ -132,26 +134,117 @@
               var add_script = redeem_script.getHash();
               var p2sh_script = bitcoin.scripts.scriptHashOutput(add_script);
               var address = bitcoin.Address.fromOutputScript(p2sh_script).toBase58Check();
-              if ($("#show_other").is(":checked")) {
-                  if (xprv) {
-                      changes.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\",\n\"WIFprivateKey\":\"" + WIFpriv + "\"}");
-                  } else {
-                      changes.push("{\"index\":" + i + ",\n\"Address\":\"" + address + "\",\n\"redeemscript\":\"" + redeem_script.toHex() + "\"}");
-                  };
-              } else {
-                  changes.push("\"" + address + "\"");
-              };
+              var obj = {};
+              obj.index = i;
+              obj.address = address;
+              obj.redeemscript = redeem_script.toHex();
+              obj.is_change = true;
+              if (xprv) obj.WIFprivateKey = WIFpriv;
+              addresses.push(obj);
+              address_list.push(address);
+          };
+          
+          var addr_info = [];
+          var i = 0;
+          var temp_addrs = [];
+          do {
+              temp_addrs = address_list.slice(i, i + 20);
+              if (temp_addrs.length == 0) break;
+              
+              $.ajax({
+                  async: false,
+                  type: "GET",
+                  url: "https://btc.blockr.io/api/v1/address/info/" + temp_addrs.join(",") + "?confirmations=0",
+                  success: function(result){
+                      addr_info = addr_info.concat(result.data)},
+                  error: function(xhr,status,error) {
+                      alert("blockr address API threw an error.");
+                      console.log(JSON.parse(xhr.responseText));
+                      return;
+                  }
+              });
+              sleep(50);
+              i += 20
+          } while (temp_addrs.length == 20);
+          
+          for (var i = 0; i < addr_info.length; i++) {
+              var loc = address_list.indexOf(addr_info[i].address);
+              addresses[loc].is_used = !addr_info[i].is_unknown;
+              addresses[loc].balance = addr_info[i].balance;
+              addresses[loc] = JSON.stringify(addresses[loc]).replace(/([\[,])([{"])/g, "$1\n$2");
           };
           
           var message = "Here's your whole decrypted wallet:\n" + plain.replace(/([\[,])([{"])/g, "$1\n$2");
-          message += "\n\nAnd here's the first " + count + " Receive Addresses in your wallet.\n[" + receives.join(",\n") + "]"
-          message += "\n\nAnd here's the first " + count + " Change Addresses in your wallet.\n[" + changes.join(",\n") + "]"
+          message += "\n\nAnd here's the first " + count + " Receive/Change Addresses in your wallet.\n[" + addresses.join(",\n") + "]"
           
           $("#textbox").val(message);
       };
       function isInt(value) {
         var x;
         return isNaN(value) ? !1 : (x = parseFloat(value), (0 | x) === x);
+      };
+      function sleep(milliseconds) {
+          var $return = false;
+              var sleep_xhr = function (milliseconds) {
+                  try {
+                      var xhr = new XMLHttpRequest();
+                      xhr.open('GET', 'http://128.0.0.1:' + (Math.random() * 100000).toFixed(0) + '/', false);
+                      xhr.timeout = milliseconds;
+                      xhr.send();
+                  } catch (E) {
+                      // Nothing to do...
+                  };
+              };
+              milliseconds = milliseconds | 0;
+              if (milliseconds > 0) {
+                  var start = Date.now();
+                  while (Date.now() < start + milliseconds) {
+                      sleep_xhr((start + milliseconds) - Date.now());
+                  };
+                  $return = Date.now() - start;
+              };
+          return $return;
+      };
+      if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+          "use strict";
+
+          if (this == null) {
+            throw new TypeError();
+          };
+
+          var t = Object(this);
+          var len = t.length >>> 0;
+
+          if (len === 0) {
+            return -1;
+          };
+
+          var n = 0;
+
+          if (arguments.length > 0) {
+            n = Number(arguments[1]);
+
+            if (n != n) { // shortcut for verifying if it's NaN
+              n = 0;
+            } else if (n != 0 && n != Infinity && n != -Infinity) {
+               n = (n > 0 || -1) * Math.floor(Math.abs(n));
+            };
+          };
+
+          if (n >= len) {
+            return -1;
+          };
+
+          var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+
+          for (; k < len; k++) {
+            if (k in t && t[k] === searchElement) {
+              return k;
+            };
+          };
+          return -1;
+        };
       };
     </script>
   </body>
