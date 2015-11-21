@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>P2SH Manager</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="bitcoin p2sh address generator" name="description" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="../css/brainwallet.css" rel="stylesheet" />
+    <link href="../favicon.ico" rel="shortcut icon" />
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bitcoinjs1-5-7.js"></script>
+    <script src="../js/sha512.js"></script>
+    <script src="../js/bip32.js"></script>
+    <script src="../js/mnemonic.js"></script>
+  </head>
+  <body>
+    <header class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span></button> <a class="navbar-brand">P2SH Manager</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" id="crCurrency">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Bitcoin Mainnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
+              <ul class="dropdown-menu">
+                <li><a id="btc_main">Bitcoin Mainnet</a></li>
+              </ul></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="bip32">
+          <form action="/" class="form-horizontal" method="get">
+            <fieldset>
+              <legend>P2SH Manager Tool</legend>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Enter redeemscript (scriptPubkey)</label>
+                <div class="col-lg-10">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="input-group">
+                        <input class="form-control" id="redeemscript" style="width: 930px;" type="text" />
+                        <input class="btn btn-default" title="Cancel" type="button" value="Show P2SH Address" id="showp2sh" />
+                        <div id="p2shaddress"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Enter scriptSig (solution)</label>
+                <div class="col-lg-10">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="input-group">
+                        <input class="form-control" id="scriptSig" style="width: 930px;" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Send to?</label>
+                <div class="col-lg-10">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="input-group">
+                        <input class="form-control" id="toaddress" style="width: 930px;" type="text" />
+                      </div>
+                      <p />
+                      <p />
+                      <form onsubmit="return false;">
+                          <input type="radio" name="feeperkb" id="feeperkb" value=1000 /> 0.00001 BTC/kB fee
+                          <p />
+                          <input type="radio" name="feeperkb" id="feeperkb" value=10000 checked/> 0.0001 BTC/kB fee
+                          <p />
+                          <input type="radio" name="feeperkb" id="feeperkb" value=20000 /> 0.0002 BTC/kB fee
+                      </form>
+                    </div>
+                  </div>
+                  <p />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Send</label>
+                <div class="col-lg-10">
+                  <div class="row">
+                    <div class="col-lg-12">
+                        <input class="btn btn-default" title="Cancel" type="button" value="Send Bitcoin" id="creatensend" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <center><div id="results"></div></center>
+            </fieldset>
+          </form>
+        </div>
+        <hr />
+        <footer>
+          <p>
+          This work of art is public domain.<br>Donations welcome at <a href="bitcoin:1KtWutb75LqXrAd4BkcW2hqG7SWab2xJeB">1KtWutb75LqXrAd4BkcW2hqG7SWab2xJeB</a>.
+            <span class="pull-right">Powered by <a href="http://pages.github.com">GitHub Pages</a> &nbsp; 
+                <a href="https://github.com/bip32JP/bip32JP.github.io">GitHub Repository</a> &nbsp; 
+                <a href="https://github.com/bip32JP/bip32JP.github.io/archive/master.zip">Download ZIP</a>
+            </span>
+          </p>
+        </footer>
+      </div>
+    </div>
+    <div class="hidden" id="skipme">0</div>
+  </body>
+  <script>
+    var datas = [];
+    
+    function recoverbtc() {
+      // initialize datas array
+      datas = []
+      
+      var scriptinfo = createp2sh();
+      var addr = scriptinfo.addr;
+      var redeemScript = scriptinfo.scriptbuf;
+      var scriptSigHex = $("#scriptSig").val();
+      var scriptSigBuf;
+      
+      try {
+        if (scriptSigHex.length % 2 == 0 && scriptSigHex.match(/^[0-9a-fA-F]+$/)) {
+          scriptSigBuf = bitcoin.Script.fromHex(scriptSigHex + "00".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
+        } else if (scriptSigHex.toUpperCase().search("OP") >= 0) {
+          scriptSigBuf = bitcoin.Script.fromASM(scriptSigHex.toUpperCase() + " OP_0".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
+          scriptSigHex = scriptSigBuf.toString('hex').slice(0,-(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length) * 2);
+        } else {
+          alert("Invalid redeemscript");
+          return null;
+        };
+      } catch(e) {
+        alert("Invalid redeemscript");
+        return null;
+      };
+      
+      // Write the pushData to the Buffer
+      bitcoin.bufferutils.writePushDataInt(scriptSigBuf, redeemScript.length, (scriptSigHex.length / 2))
+      
+      // Copy the redeemscript into the scriptSig
+      redeemScript.copy(scriptSigBuf, (scriptSigHex.length / 2) + bitcoin.bufferutils.pushDataSize(redeemScript.length), 0, redeemScript.length);
+      
+      // Return scriptSig into being a bitcoin.Script object
+      var scriptSig = bitcoin.Script.fromBuffer(scriptSigBuf);
+      
+      $.ajax({
+          async: false,
+          type: "POST",
+          url: "https://insight.bitpay.com/api/addrs/utxo",
+          data: {
+              addrs: addr
+          },
+          success: function(result){
+              datas = result;
+              console.log(result.length + " utxos found");
+      }});
+      
+      if (datas.length == 0){
+          alert('No unspent bitcoins to send!');
+          return;
+      };
+      
+      var inputs = [];
+      var paths = [];
+      var amountin = 0;
+      
+      for (i=0;i<datas.length;i++) {
+          inputs.push([datas[i].txid, datas[i].vout])
+          amountin = amountin + (datas[i].amount * 1e8)
+      };
+      
+      console.log(amountin + " satoshis found");
+      
+      var feerate = $("input[name='feeperkb']:checked").val();
+      var estsize = 44 + ((redeemScript.length + scriptSig.toBuffer().length + 40 + bitcoin.bufferutils.pushDataSize(redeemScript.length) + bitcoin.bufferutils.pushDataSize(scriptSig.toBuffer().length)) * datas.length);
+      var fees = (feerate * estsize) / 1000;
+      
+      if (fees > 10000000){
+          alert("fees too high, please contact support");
+          return;
+      } else if (fees < 1000){
+          fees = 1000;
+      };
+      
+      if (amountin <= fees) {
+          alert("fees larger than balance. Contact support");
+          return;
+      };
+      
+      console.log(fees + " satoshi fee will be paid");
+      
+      var outaddr = $("#toaddress").val();
+      
+      try{
+          var garbage = bitcoin.base58check.decode(outaddr);
+          garbage = null;
+      } catch(err) {
+          alert(err);
+          return;
+      };
+      
+      var tx = new bitcoin.Transaction()
+      
+      for (i=0;i<inputs.length;i++) {
+          tx.addInput(inputs[i][0], inputs[i][1], undefined, scriptSig);
+      };
+      
+      tx.addOutput(outaddr, amountin - fees);
+      
+      //var ecpriv = null;
+      //var wif = null;
+      //var buffer = null;
+      
+      //for (i=0; i < inputs.length; i++) {
+          //wif = brainECkey.getExportedPrivateKey();
+          //wif = bitcoin.base58check.decode(wif);
+          //buffer = bitcoin.base58check.decode("KzQdVet3toVdW5pmTUzDj19e95USus2i9KK6kELMLAUPgonzeNFx");
+          //wif.copy(buffer, 0);
+          //buffer.writeUInt8(0x01, 33)
+          //wif = bitcoin.base58check.encode(buffer);
+          //ecpriv = bitcoin.ECKey.fromWIF(wif);
+          //tx.sign(i, ecpriv);
+      //};
+      
+      var rawTxHex = tx.toHex()
+      
+      console.log("Raw transaction (in case push tx fails):\n\n" + rawTxHex + "\n\n");
+      
+      $.ajax({
+          async: false,
+          type: "POST",
+          url: "https://btc.blockr.io/api/v1/tx/push",
+          data: {
+              hex: rawTxHex
+          },
+          success: function(result){
+              $("#results").html("Sent transaction (id):<br>" + result.data);
+      }});
+      
+    };
+    
+    function createp2sh() {
+      $("#p2shaddress").html("");
+      var redeemscript = $("#redeemscript").val();
+      var scriptbuf;
+      
+      try {
+        if (redeemscript.length % 2 == 0 && redeemscript.match(/^[0-9a-fA-F]+$/)) {
+          scriptbuf = bitcoin.Script.fromHex(redeemscript).toBuffer();
+        } else if (redeemscript.toUpperCase().search("OP") >= 0) {
+          scriptbuf = bitcoin.Script.fromASM(redeemscript.toUpperCase()).toBuffer();
+        } else {
+          alert("Invalid redeemscript");
+          return null;
+        };
+      } catch(e) {
+        alert("Invalid redeemscript");
+        return null;
+      };
+      
+      var ret = new bitcoin.Address(bitcoin.crypto.hash160(scriptbuf), bitcoin.networks.bitcoin.scriptHash).toString();
+      
+      var confirmed;
+      var unconfirmed;
+      $.ajax({
+          async: false,
+          type: "GET",
+          url: "https://insight.bitpay.com/api/addr/" + ret + "/balance",
+          success: function(result){
+              confirmed = result;
+              console.log("  Confirmed balance: " + confirmed + " satoshis");
+      }});
+      
+      $.ajax({
+          async: false,
+          type: "GET",
+          url: "https://insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance",
+          success: function(result){
+              unconfirmed = result;
+              console.log("Unconfirmed balance: " + unconfirmed + " satoshis");
+      }});
+      
+      $("#p2shaddress").html("Result: " + ret + "<br/>Current Balance: " + ((confirmed + unconfirmed) / 1e8) + " BTC" )
+      return {
+        scriptbuf: scriptbuf,
+        addr: ret
+      };
+    };
+    
+    $(document).ready( function() {
+      $("#creatensend").on('click', recoverbtc);
+      $("#showp2sh").on('click', createp2sh);
+    });
+  </script>
+</html>
+
