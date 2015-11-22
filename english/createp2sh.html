@@ -95,8 +95,8 @@
                 <div class="col-lg-10">
                   <div class="row">
                     <div class="col-lg-12">
-                        <input class="btn btn-default" title="CreateNSend" type="button" value="Send Bitcoin" id="creatensend" />
-                        <input class="btn btn-default" title="Create" type="button" value="Create Transaction Only" id="createonly" />
+                        <input class="btn btn-default" title="Send Bitcoin" type="button" value="Send Bitcoin" id="creatensend" />
+                        <input class="btn btn-default" title="Create Transaction Only" type="button" value="Create Transaction Only" id="createonly" />
                     </div>
                   </div>
                 </div>
@@ -324,10 +324,11 @@
 
       var confirmed;
       var unconfirmed;
+      var baseUrl = (network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash) ? "https://insight.bitpay.com/" : "https://test-insight.bitpay.com/"
       $.ajax({
           async: false,
           type: "GET",
-          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://insight.bitpay.com/api/addr/" + ret + "/balance" : "https://test-insight.bitpay.com/api/addr/" + ret + "/balance",
+          url: baseUrl + "api/addr/" + ret + "/balance",
           success: function(result){
               confirmed = result;
               console.log("  Confirmed balance: " + confirmed + " satoshis");
@@ -336,13 +337,13 @@
       $.ajax({
           async: false,
           type: "GET",
-          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance" : "https://test-insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance",
+          url: baseUrl + "api/addr/" + ret + "/unconfirmedBalance",
           success: function(result){
               unconfirmed = result;
               console.log("Unconfirmed balance: " + unconfirmed + " satoshis");
       }});
 
-      $("#p2shaddress").html("Result: " + ret + "<br/>Current Balance: " + ((confirmed + unconfirmed) / 1e8) + " BTC" )
+      $("#p2shaddress").html("Result: <a href=\"" + baseUrl + "address/" + ret + "\"  target=\"_blank\">" + ret + "</a><br/>Current Balance: " + ((confirmed + unconfirmed) / 1e8) + " BTC" )
       return {
         scriptbuf: scriptbuf,
         addr: ret
