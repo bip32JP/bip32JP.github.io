@@ -95,7 +95,8 @@
                 <div class="col-lg-10">
                   <div class="row">
                     <div class="col-lg-12">
-                        <input class="btn btn-default" title="Cancel" type="button" value="Send Bitcoin" id="creatensend" />
+                        <input class="btn btn-default" title="CreateNSend" type="button" value="Send Bitcoin" id="creatensend" />
+                        <input class="btn btn-default" title="Create" type="button" value="Create Transaction Only" id="createonly" />
                     </div>
                   </div>
                 </div>
@@ -116,15 +117,19 @@
         </footer>
       </div>
     </div>
-    <div class="hidden" id="skipme">0</div>
   </body>
   <script>
     var datas = [];
     var network = bitcoin.networks.testnet;
 
-    function recoverbtc() {
+    function recoverbtcnosend(_) {
+      recoverbtc(_, true);
+    };
+
+    function recoverbtc(_, nosend) {
       // initialize datas array
-      datas = []
+      datas = [];
+      $("#results").html("");
 
       var scriptinfo = createp2sh();
       var addr = scriptinfo.addr;
@@ -203,7 +208,7 @@
       console.log(amountin + " satoshis found");
 
       var feerate = $("input[name='feeperkb']:checked").val();
-      var estsize = 44 + ((redeemScript.length + scriptSig.toBuffer().length + 40 + bitcoin.bufferutils.pushDataSize(redeemScript.length) + bitcoin.bufferutils.pushDataSize(scriptSig.toBuffer().length)) * datas.length);
+      var estsize = 44 + ((scriptSig.toBuffer().length + 40 + bitcoin.bufferutils.pushDataSize(scriptSig.toBuffer().length)) * datas.length);
       var fees = (feerate * estsize) / 1000;
 
       if (fees > 10000000){
@@ -279,16 +284,20 @@
 
       console.log("Raw transaction (in case push tx fails):\n\n" + rawTxHex + "\n\n");
 
-      $.ajax({
-          async: false,
-          type: "POST",
-          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://btc.blockr.io/api/v1/tx/push" : "https://tbtc.blockr.io/api/v1/tx/push",
-          data: {
-              hex: rawTxHex
-          },
-          success: function(result){
-              $("#results").html("Sent transaction (id):<br>" + result.data);
-      }});
+      if (!nosend) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://btc.blockr.io/api/v1/tx/push" : "https://tbtc.blockr.io/api/v1/tx/push",
+            data: {
+                hex: rawTxHex
+            },
+            success: function(result){
+                $("#results").html("Sent transaction (id):<br>" + result.data);
+        }});
+      } else {
+        $("#results").html('Raw Transaction:<br><textarea cols="150" rows="10">' + rawTxHex + '</textarea>');
+      };
 
     };
 
@@ -406,6 +415,7 @@
 
     function initializeElements() {
       $("#creatensend").on('click', recoverbtc);
+      $("#createonly").on('click', recoverbtcnosend);
       $("#showp2sh").on('click', createp2sh);
       $("#scriptSig").on('change', checkForSigs);
       $('#crCurrency ul li a').on('click', crChange);
