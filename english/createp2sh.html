@@ -25,9 +25,10 @@
         <nav class="collapse navbar-collapse bs-navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="crCurrency">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Bitcoin Mainnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Bitcoin Testnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
               <ul class="dropdown-menu">
-                <li><a id="btc_main">Bitcoin Mainnet</a></li>
+                <li><a id="bitcoin">Bitcoin Mainnet</a></li>
+                <li><a id="testnet">Bitcoin Testnet</a></li>
               </ul></li>
           </ul>
         </nav>
@@ -37,7 +38,7 @@
       <div class="tab-content">
         <div class="tab-pane fade in active" id="bip32">
           <form action="/" class="form-horizontal" method="get">
-            <fieldset>
+            <fieldset id="fields">
               <legend>P2SH Manager Tool</legend>
               <div class="form-group">
                 <label class="col-lg-2 control-label">Enter redeemscript (scriptPubkey)</label>
@@ -54,7 +55,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-lg-2 control-label">Enter scriptSig (solution)</label>
+                <label class="col-lg-2 control-label">Enter scriptSig (solution)<br/>(SIG_n for Signatures)</label>
                 <div class="col-lg-10">
                   <div class="row">
                     <div class="col-lg-12">
@@ -65,6 +66,8 @@
                   </div>
                 </div>
               </div>
+              <!-- SIG_privatekeys start here -->
+              <!-- SIG_privatekeys go here -->
               <div class="form-group">
                 <label class="col-lg-2 control-label">Send to?</label>
                 <div class="col-lg-10">
@@ -117,6 +120,7 @@
   </body>
   <script>
     var datas = [];
+    var network = bitcoin.networks.testnet;
     
     function recoverbtc() {
       // initialize datas array
@@ -126,20 +130,27 @@
       var addr = scriptinfo.addr;
       var redeemScript = scriptinfo.scriptbuf;
       var scriptSigHex = $("#scriptSig").val();
+      var sigMatches = scriptSigHex.match(/SIG_\d+/gi);
       var scriptSigBuf;
+      
+      if (sigMatches) {
+        for (var i = 0; i < sigMatches.length; i++) {
+          scriptSigHex = scriptSigHex.replace(sigMatches[i], textToHex(sigMatches[i].toUpperCase()) + "7c".repeat(67)) // "5349475f" = "SIG_"
+        };
+      };
       
       try {
         if (scriptSigHex.length % 2 == 0 && scriptSigHex.match(/^[0-9a-fA-F]+$/)) {
           scriptSigBuf = bitcoin.Script.fromHex(scriptSigHex + "00".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
-        } else if (scriptSigHex.toUpperCase().search("OP") >= 0) {
+        } else if (scriptSigHex.toUpperCase().search("OP") >= 0 || scriptSigHex.toUpperCase().search(" 5349475f") >= 0) {
           scriptSigBuf = bitcoin.Script.fromASM(scriptSigHex.toUpperCase() + " OP_0".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
           scriptSigHex = scriptSigBuf.toString('hex').slice(0,-(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length) * 2);
         } else {
-          alert("Invalid redeemscript");
+          alert("Invalid scriptSig");
           return null;
         };
       } catch(e) {
-        alert("Invalid redeemscript");
+        alert("Invalid scriptSig error");
         return null;
       };
       
@@ -152,17 +163,28 @@
       // Return scriptSig into being a bitcoin.Script object
       var scriptSig = bitcoin.Script.fromBuffer(scriptSigBuf);
       
-      $.ajax({
-          async: false,
-          type: "POST",
-          url: "https://insight.bitpay.com/api/addrs/utxo",
-          data: {
-              addrs: addr
-          },
-          success: function(result){
-              datas = result;
-              console.log(result.length + " utxos found");
-      }});
+      if (network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "https://insight.bitpay.com/api/addrs/utxo",
+            data: {
+                addrs: addr
+            },
+            success: function(result){
+                datas = result;
+                console.log(result.length + " utxos found");
+        }});
+      } else {
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: "https://test-insight.bitpay.com/api/addr/" + addr + "/utxo",
+            success: function(result){
+                datas = result;
+                console.log(result.length + " utxos found");
+        }});
+      };
       
       if (datas.length == 0){
           alert('No unspent bitcoins to send!');
@@ -196,13 +218,19 @@
           return;
       };
       
-      console.log(fees + " satoshi fee will be paid");
+      console.log(fees + " satoshi fee will be paid for estimated size of " + estsize + " bytes at a rate of " + feerate + " satoshis per kB");
       
       var outaddr = $("#toaddress").val();
       
       try{
-          var garbage = bitcoin.base58check.decode(outaddr);
-          garbage = null;
+          var gpayload = bitcoin.base58check.decode(outaddr);
+          var gversion = gpayload.readUInt8(0);
+          if (gversion != network.scriptHash && gversion != network.pubKeyHash) {
+            alert("Version of Output address is incorrect! Make sure Testnet or Mainnet addresses match with your settings!")
+            return;
+          };
+          gpayload = null;
+          gversion = null;
       } catch(err) {
           alert(err);
           return;
@@ -216,20 +244,36 @@
       
       tx.addOutput(outaddr, amountin - fees);
       
-      //var ecpriv = null;
-      //var wif = null;
-      //var buffer = null;
-      
-      //for (i=0; i < inputs.length; i++) {
-          //wif = brainECkey.getExportedPrivateKey();
-          //wif = bitcoin.base58check.decode(wif);
-          //buffer = bitcoin.base58check.decode("KzQdVet3toVdW5pmTUzDj19e95USus2i9KK6kELMLAUPgonzeNFx");
-          //wif.copy(buffer, 0);
-          //buffer.writeUInt8(0x01, 33)
-          //wif = bitcoin.base58check.encode(buffer);
-          //ecpriv = bitcoin.ECKey.fromWIF(wif);
-          //tx.sign(i, ecpriv);
-      //};
+      if (sigMatches) {
+        var WIFstr = "";
+        var WIFkey;
+        for (var i = 0; i < sigMatches.length; i++) {
+          WIFstr = $("#" + sigMatches[i].toUpperCase()).val();
+          try{
+              var gpayload = bitcoin.base58check.decode(WIFstr);
+              var gversion = gpayload.readUInt8(0);
+              if (gversion != network.wif) {
+                alert("Version of WIF private key is incorrect! Make sure Testnet or Mainnet addresses match with your settings!")
+                return;
+              };
+              gpayload = null;
+              gversion = null;
+          } catch(err) {
+              alert(err);
+              return;
+          };
+          
+          WIFkey = bitcoin.ECKey.fromWIF(WIFstr);
+          
+          var hashForSig;
+          var sigBuf;
+          for (var j = 0; j < inputs.length; j++) {
+            hashForSig = tx.hashForSignature(j, bitcoin.Script.fromBuffer(redeemScript), 0x01);
+            sigBuf = WIFkey.sign(hashForSig).toScriptSignature(0x01);
+            tx.ins[j].script = bitcoin.Script.fromASM(tx.ins[j].script.toASM().replace(textToHex(sigMatches[i].toUpperCase()) + "7c".repeat(67), sigBuf.toString('hex')));
+          };
+        };
+      };
       
       var rawTxHex = tx.toHex()
       
@@ -238,7 +282,7 @@
       $.ajax({
           async: false,
           type: "POST",
-          url: "https://btc.blockr.io/api/v1/tx/push",
+          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://btc.blockr.io/api/v1/tx/push" : "https://tbtc.blockr.io/api/v1/tx/push",
           data: {
               hex: rawTxHex
           },
@@ -267,14 +311,14 @@
         return null;
       };
       
-      var ret = new bitcoin.Address(bitcoin.crypto.hash160(scriptbuf), bitcoin.networks.bitcoin.scriptHash).toString();
+      var ret = new bitcoin.Address(bitcoin.crypto.hash160(scriptbuf), network.scriptHash).toString();
       
       var confirmed;
       var unconfirmed;
       $.ajax({
           async: false,
           type: "GET",
-          url: "https://insight.bitpay.com/api/addr/" + ret + "/balance",
+          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://insight.bitpay.com/api/addr/" + ret + "/balance" : "https://test-insight.bitpay.com/api/addr/" + ret + "/balance",
           success: function(result){
               confirmed = result;
               console.log("  Confirmed balance: " + confirmed + " satoshis");
@@ -283,7 +327,7 @@
       $.ajax({
           async: false,
           type: "GET",
-          url: "https://insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance",
+          url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance" : "https://test-insight.bitpay.com/api/addr/" + ret + "/unconfirmedBalance",
           success: function(result){
               unconfirmed = result;
               console.log("Unconfirmed balance: " + unconfirmed + " satoshis");
@@ -296,10 +340,64 @@
       };
     };
     
-    $(document).ready( function() {
+    function checkForSigs() {
+      var scriptSigText = $("#scriptSig").val();
+      var sigmatches = scriptSigText.match(/SIG_\d+/gi);
+      if (sigmatches) {
+        // For replacing later
+        var redeemscript = $("#redeemscript").val();
+        var toaddress = $("#toaddress").val();
+        var feerate = $("input[name='feeperkb']:checked").val();
+        
+        var fieldshtml = $("#fields").html();
+        var startPosition = fieldshtml.search("<!-- SIG_privatekeys start here -->");
+        var insertPosition = fieldshtml.search("<!-- SIG_privatekeys go here -->");
+        if (insertPosition - startPosition > 55) fieldshtml = fieldshtml.slice(0, startPosition + 35) + fieldshtml.slice(insertPosition);
+        
+        for (var i = 0; i < sigmatches.length; i++) {
+          if (sigmatches.join("|").match(new RegExp(sigmatches[i], "gi")).length > 1) {
+            alert("Two signatures with the same number, change the numbers to they are different.");
+            $("#scriptSig").val("");
+            return;
+          };
+          var sigcode = sigmatches[i].toUpperCase();
+          insertPosition = fieldshtml.search("<!-- SIG_privatekeys go here -->");
+          fieldshtml = fieldshtml.slice(0, insertPosition) + '<div class="form-group">\n                <label class="col-lg-2 control-label">Private Key for ' + sigcode +
+            '</label>\n                <div class="col-lg-10">\n                  <div class="row">\n                    <div class="col-lg-12">\n                      <div class="input-group">\n                        <input class="form-control" id="' +
+            sigcode + '" style="width: 930px;" type="text" />\n                      </div>\n                    </div>\n                  </div>\n                </div>\n              </div>\n              ' + fieldshtml.slice(insertPosition)
+        };
+        
+        $("#fields").html(fieldshtml);
+        initializeElements();
+        
+        $("#scriptSig").val(scriptSigText);
+        $("#redeemscript").val(redeemscript);
+        $("#toaddress").val(toaddress);
+        $("input[name='feeperkb'][value=" + feerate + "]").prop("checked",true)
+      };
+    };
+    
+    function textToHex(txtstr) {
+      var ret = "";
+      for (var i = 0; i < txtstr.length; i++) {
+        ret += txtstr.slice(i, i + 1).charCodeAt().toString(16)
+      };
+      return ret;
+    };
+    
+    function crChange(e) {
+      network = bitcoin.networks[$(this).attr("id")];
+      $('#crName').text($(this).text());
+      $('#crSelect').dropdown('toggle');
+    };
+    
+    function initializeElements() {
       $("#creatensend").on('click', recoverbtc);
       $("#showp2sh").on('click', createp2sh);
-    });
+      $("#scriptSig").on('change', checkForSigs);
+      $('#crCurrency ul li a').on('click', crChange);
+    };
+    
+    $(document).ready(initializeElements);
   </script>
 </html>
-
