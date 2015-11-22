@@ -10624,6 +10624,10 @@ module.exports = {
   OP_CHECKMULTISIG: 174,
   OP_CHECKMULTISIGVERIFY: 175,
 
+  // BIP 65 support (soon to be activated)
+  OP_CHECKLOCKTIMEVERIFY: 177,
+  OP_CLTV: 177,
+
   // expansion
   OP_NOP1: 176,
   OP_NOP2: 177,
