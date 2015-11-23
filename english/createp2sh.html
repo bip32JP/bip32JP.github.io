@@ -159,6 +159,13 @@
         return null;
       };
 
+      if (!sigMatches) {
+        console.log("ScriptSig: " + scriptSigHex +
+                    "\n    (ASM): " + bitcoin.Script.fromHex(scriptSigHex).toASM());
+      } else {
+        console.log("Unsigned scriptSig(ASM): " + bitcoin.Script.fromHex(scriptSigHex).toASM().replace(/5349475f[0-9a-fA-F]{2}(7c){67}/g, "SIG"));
+      };
+
       // Write the pushData to the Buffer
       bitcoin.bufferutils.writePushDataInt(scriptSigBuf, redeemScript.length, (scriptSigHex.length / 2))
 
@@ -278,6 +285,10 @@
             tx.ins[j].script = bitcoin.Script.fromASM(tx.ins[j].script.toASM().replace(textToHex(sigMatches[i].toUpperCase()) + "7c".repeat(67), sigBuf.toString('hex')));
           };
         };
+
+          console.log("Signed scriptSig(vin 0): " + tx.ins[0].script.toBuffer().toString('hex').slice(0,-(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length) * 2) +
+                      "\n           (ASM)(vin 0): " + bitcoin.Script.fromHex(tx.ins[0].script.toBuffer().toString('hex').slice(0,-(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length) * 2)).toASM());
+
       };
 
       var rawTxHex = tx.toHex()
@@ -319,6 +330,9 @@
         alert("Invalid redeemscript");
         return null;
       };
+
+      console.log("Redeemscript: " + scriptbuf.toString('hex') +
+                  "\n       (ASM): " + bitcoin.Script.fromBuffer(scriptbuf).toASM());
 
       var ret = new bitcoin.Address(bitcoin.crypto.hash160(scriptbuf), network.scriptHash).toString();
 
