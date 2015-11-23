@@ -134,7 +134,7 @@
       var scriptinfo = createp2sh();
       var addr = scriptinfo.addr;
       var redeemScript = scriptinfo.scriptbuf;
-      var scriptSigHex = $("#scriptSig").val();
+      var scriptSigHex = $("#scriptSig").val().trim().replace(/\s+/g," ");
       var sigMatches = scriptSigHex.match(/SIG_\d+/gi);
       var scriptSigBuf;
 
@@ -225,7 +225,7 @@
 
       console.log(fees + " satoshi fee will be paid for estimated size of " + estsize + " bytes at a rate of " + feerate + " satoshis per kB");
 
-      var outaddr = $("#toaddress").val();
+      var outaddr = $("#toaddress").val().trim();
 
       try{
           var gpayload = bitcoin.base58check.decode(outaddr);
@@ -303,7 +303,7 @@
 
     function createp2sh() {
       $("#p2shaddress").html("");
-      var redeemscript = $("#redeemscript").val();
+      var redeemscript = $("#redeemscript").val().trim().replace(/\s+/g," ");
       var scriptbuf;
 
       try {
