@@ -162,9 +162,12 @@
       if (!sigMatches) {
         console.log("ScriptSig: " + scriptSigHex +
                     "\n    (ASM): " + bitcoin.Script.fromHex(scriptSigHex).toASM());
+        $("#p2shaddress").html($("#p2shaddress").html() + "<br/><a href=\"http://webbtc.com/script/" + bitcoin.Script.fromHex(scriptSigHex).toASM() + "/" + bitcoin.Script.fromBuffer(redeemScript).toASM() + "/\" target=\"_blank\">View Script on webbtc</a>");
       } else {
         console.log("Unsigned scriptSig(ASM): " + bitcoin.Script.fromHex(scriptSigHex).toASM().replace(/5349475f[0-9a-fA-F]{2}(7c){67}/g, "SIG"));
+        $("#p2shaddress").html($("#p2shaddress").html() + "<br/><a href=\"http://webbtc.com/script/" + bitcoin.Script.fromHex(scriptSigHex).toASM().replace(/5349475f[0-9a-fA-F]{2}(7c){67}/g, "534947") + "/" + bitcoin.Script.fromBuffer(redeemScript).toASM() + "/\" target=\"_blank\">View Script on webbtc</a>");
       };
+
 
       // Write the pushData to the Buffer
       bitcoin.bufferutils.writePushDataInt(scriptSigBuf, redeemScript.length, (scriptSigHex.length / 2))
