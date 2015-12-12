@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Get Block Headers</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+    <script>
+    function littleEnd(hex) {
+      if ((!(hex instanceof String) && typeof hex != "string") || !hex.match(/^[0-9a-fA-F]+$/) || hex.length % 2 !== 0) {
+        throw "Error: Must be even length hex string representing bytes";
+      }
+      var ret = "";
+      for (var i = 0; i < hex.length / 2; i++) {
+        ret = hex.slice(i * 2, (i * 2) + 2) + ret
+      }
+      return ret;
+    }
+
+    function toUint32(num) {
+      if ((!(num instanceof Number) && typeof num != "number") || num > 0xffffffff || num < 0 || Math.floor(num) != num) {
+        throw "Error: Must be unsigned integer between 0 and 0xffffffff";
+      }
+      return littleEnd(("00000000" + num.toString(16)).slice(-8))
+    }
+
+    function blockHeaderFromResponse(res) {
+      return (toUint32(res.data.version) + // version
+              littleEnd(res.data.previousblockhash) + // previous block hash
+              littleEnd(res.data.merkleroot) + // merkle root
+              toUint32(res.data.time) + // Timestamp
+              littleEnd(res.data.bits) + // Difficulty target
+              toUint32(res.data.nonce)) // Nonce
+    }
+
+    function getBlockHeader () {
+      var blockname = $("#BlockNumber").val();
+      if (blockname == 'first' || blockname == '0') {
+        var result = JSON.parse(CryptoJS.enc.Hex.parse("7b22737461747573223a2273756363657373222c2264617461223a7b22686173" +
+                                                       "68223a2230303030303030303030313964363638396330383561653136353833" +
+                                                       "3165393334666637363361653436613261366331373262336631623630613863" +
+                                                       "65323666222c2276657273696f6e223a312c226d65726b6c65726f6f74223a22" +
+                                                       "3461356531653462616162383966336133323531386138386333316263383766" +
+                                                       "3631386637363637336532636337376162323132376237616664656461333362" +
+                                                       "222c2274696d65223a313233313030363530352c226e6f6e6365223a32303833" +
+                                                       "3233363839332c2262697473223a223164303066666666222c2270726576696f" +
+                                                       "7573626c6f636b68617368223a22303030303030303030303030303030303030" +
+                                                       "3030303030303030303030303030303030303030303030303030303030303030" +
+                                                       "3030303030303030303030303030227d2c22636f6465223a3230302c226d6573" +
+                                                       "73616765223a22227d").toString(CryptoJS.enc.Utf8));
+        var header = blockHeaderFromResponse(result);
+        $("#res").html("Block Header:<br/><br/><div style=\"word-break:break-all\">" + header +
+                       "<br/><br/>Block Hash:<br/><br/>" + getBlockHashFromHeader(header) + "</div>");
+        console.log(JSON.stringify(result, null, 1));
+      } else {
+        $.ajax({
+          //async: false,
+          type: "GET",
+          url: "https://btc.blockr.io/api/v1/block/raw/" + blockname,
+          success: function(result){
+            var header = blockHeaderFromResponse(result);
+            $("#res").html("Block Header:<br/><br/><div style=\"word-break:break-all\">" + header +
+                           "<br/><br/>Block Hash:<br/><br/>" + getBlockHashFromHeader(header) + "</div>");
+            console.log(JSON.stringify(result, null, 1));
+          },
+          error: function(xhr, status, error){
+            $("#res").html("<font size=\"4\" color=\"#0000ff\"><b>Server Error: Invalid block number or timeout.</b></font>");
+            console.log(error.toString());
+        }});
+      };
+    }
+
+    function getBlockHashFromHeader (header) {
+      return littleEnd(CryptoJS.SHA256(CryptoJS.SHA256(CryptoJS.enc.Hex.parse(header))).toString());
+    }
+    </script>
+  </head>
+  <body>
+    <div id="body">
+      <center>
+        <input id="BlockNumber" /><br>
+        <input id="submitform" type="button" onclick="getBlockHeader()" value="Get Block Header" /><br>
+        <br>
+        <div id="res"></div>
+      </center>
+    </div>
+  </body>
+</html>
