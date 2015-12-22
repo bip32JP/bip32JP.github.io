@@ -25,14 +25,9 @@
     </xsl:choose>
 </xsl:template>
 
-<xsl:variable name="_lf">&#xA;</xsl:variable>
+<xsl:variable name="_lf"><xsl:text>
+</xsl:text></xsl:variable>
 <xsl:variable name="lf" select="string($_lf)"/>
-
-<xsl:variable name="_space"><xsl:text> </xsl:text></xsl:variable>
-<xsl:variable name="space" select="string($_space)"/>
-
-<xsl:variable name="_zenspace"><xsl:text>　</xsl:text></xsl:variable>
-<xsl:variable name="zenspace" select="string($_zenspace)"/>
 
 <xsl:template match="root">
   <html>
@@ -81,7 +76,7 @@
             </xsl:variable>
             <td width="1%"><xsl:value-of select="substring-before(./@val,'|')"/></td>
             <td width="1%"><xsl:value-of select="substring-after(substring-after(substring-after(substring-after($newattr,'|'),'|'),'|'),'|')"/></td>
-            <td width="100%"><div style="line-height:150%;white-space:pre-wrap"><xsl:value-of select="$newtext" disable-output-escaping="yes"/></div></td>
+            <td width="100%"><div style="line-height:150%;white-space:pre-wrap"><xsl:value-of select="$newtext" disable-output-escaping="yes"/></div><xsl:if test="./@gazo"><xsl:variable name="gazonm" select="./@gazo" /><a href="https://www.jtbgenesis.com/pic/tour/{$gazonm}" target="_blank"><xsl:value-of select="$gazonm"/></a></xsl:if></td>
           </tr>
       </xsl:for-each>
     </table>
