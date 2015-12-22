@@ -25,8 +25,7 @@
     </xsl:choose>
 </xsl:template>
 
-<xsl:variable name="_lf"><xsl:text>
-</xsl:text></xsl:variable>
+<xsl:variable name="_lf">&#xA;</xsl:variable>
 <xsl:variable name="lf" select="string($_lf)"/>
 
 <xsl:template match="root">
