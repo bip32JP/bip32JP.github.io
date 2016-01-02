@@ -145,9 +145,9 @@
       };
 
       try {
-        if (scriptSigHex.length % 2 == 0 && scriptSigHex.match(/^[0-9a-fA-F]+$/)) {
+        if (scriptSigHex.length % 2 == 0 && scriptSigHex.match(/^[0-9a-fA-F]+$/) && !scriptSigHex.match(/5349475[fF](3[0-9]){1,}(7[cC]){15,}/)) {
           scriptSigBuf = bitcoin.Script.fromHex(scriptSigHex + "00".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
-        } else if (scriptSigHex.toUpperCase().search("OP") >= 0 || scriptSigHex.toUpperCase().search(" 5349475f") >= 0) {
+        } else if (scriptSigHex.toUpperCase().search("OP") >= 0 || scriptSigHex.match(/5349475[fF](3[0-9]){1,}(7[cC]){15,}/)) {
           scriptSigBuf = bitcoin.Script.fromASM(scriptSigHex.toUpperCase() + " OP_0".repeat(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length)).toBuffer();
           scriptSigHex = scriptSigBuf.toString('hex').slice(0,-(bitcoin.bufferutils.pushDataSize(redeemScript.length) + redeemScript.length) * 2);
         } else {
