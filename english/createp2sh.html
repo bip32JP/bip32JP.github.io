@@ -214,7 +214,7 @@
           inputs.push([datas[i].txid, datas[i].vout])
           amountin = amountin + (datas[i].amount * 1e8)
       };
-
+      amountin = parseInt(amountin)
       console.log(amountin + " satoshis found");
 
       var feerate = $("input[name='feeperkb']:checked").val();
