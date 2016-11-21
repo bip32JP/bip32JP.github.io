@@ -60,7 +60,7 @@ BIP39.prototype.generateMnemonic = function(strength, rng) {
 
 BIP39.prototype.validate = function(mnemonic) {
   if(isJP){
-  mnemonic = mnemonic.replace(' ', '　');
+  mnemonic = mnemonic.replace(/ /g, '　');
   var words = mnemonic.split('　')
   } else {
   var words = mnemonic.split(' ')
