@@ -346,6 +346,7 @@
     function updateSourcePassphrase() {
         var passphrase = $("#bip32_source_passphrase").val();
         var seed_pw = $("#bip39_passphrase").val();
+        passphrase = passphrase.normalize("NFKD");
         seed_pw = seed_pw.normalize("NFKD");
         if(isJP){
             passphrase = passphrase.replace(' ', '　');
