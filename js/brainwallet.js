@@ -203,7 +203,6 @@
     function onUpdateSourcePassphrase() {
         clearTimeout(timeout);
         timeout = setTimeout(updateSourcePassphrase, TIMEOUT);
-        setWarningState($("#bip32_source_passphrase"), false);
     }
 
     function onLanguageChanged() {
@@ -353,10 +352,12 @@
         //}
         if(!bip39.validate(passphrase)&&passphrase!=''){
         
-        alert( "Incorrect BIP39 Phrase" );
+        //alert( "Incorrect BIP39 Phrase" );
+        setWarningState($("#bip32_source_passphrase"), true);
         
         } else if(passphrase!='') {
         
+        setWarningState($("#bip32_source_passphrase"), false);
         passphrase = passphrase.normalize("NFKD");
         bip32_passphrase_hash = bip39.mnemonicToSeed(passphrase, seed_pw);
         updatePassphraseHash();
