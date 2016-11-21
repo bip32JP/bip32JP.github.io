@@ -348,9 +348,9 @@
         var seed_pw = $("#bip39_passphrase").val();
         passphrase = passphrase.normalize("NFKD");
         seed_pw = seed_pw.normalize("NFKD");
-        if(isJP){
-            passphrase = passphrase.replace(' ', '　');
-        }
+        //if(isJP){
+        //    passphrase = passphrase.replace(' ', '　');
+        //}
         if(!bip39.validate(passphrase)&&passphrase!=''){
         
         alert( "Incorrect BIP39 Phrase" );
