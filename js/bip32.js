@@ -20,6 +20,9 @@ var KUMACOIN_MAINNET_PRIVATE = 0x01865009;
 var KUMACOIN_TESTNET_PUBLIC = 0x04346c97;
 var KUMACOIN_TESTNET_PRIVATE = 0x04346d1b;
 
+var USE_BIP32_HARD_DERIVATION_BUG = false;
+var ASKED_ABOUT_DERIVATION_BUG = false;
+
 var BIP32 = function(bytes) {
     // decode base58
     if( typeof bytes === "string" ) {
@@ -291,7 +294,20 @@ BIP32.prototype.derive_child = function(i) {
         var data = null;
 
         if( use_private ) {
-            data = ([0,0,0,0,0,0].concat(this.eckey.priv.toByteArrayUnsigned()).concat(ib)).slice(-37);
+            var privKeyBytes = this.eckey.priv.toByteArrayUnsigned();
+            
+            // Fix a bug in 0 padding for private key bytes, but give user option to use old method.
+            if (privKeyBytes.length < 32 && !USE_BIP32_HARD_DERIVATION_BUG) {
+                if (!ASKED_ABOUT_DERIVATION_BUG) {
+                    USE_BIP32_HARD_DERIVATION_BUG = confirm("Would you like to use pre-bug-fix derivation? (If you don't know what this means, say no)");
+                    ASKED_ABOUT_DERIVATION_BUG = true;
+                }
+                while (privKeyBytes.length < 32 && !USE_BIP32_HARD_DERIVATION_BUG) {
+                    privKeyBytes = [0].concat(privKeyBytes);
+                }
+            }
+            
+            data = [0].concat(privKeyBytes).concat(ib);
         } else {
             data = this.eckey.pub.getEncoded(true).concat(ib);
         }
