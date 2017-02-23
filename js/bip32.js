@@ -291,7 +291,7 @@ BIP32.prototype.derive_child = function(i) {
         var data = null;
 
         if( use_private ) {
-            data = [0].concat(this.eckey.priv.toByteArrayUnsigned()).concat(ib);
+            data = ([0,0,0,0,0,0].concat(this.eckey.priv.toByteArrayUnsigned()).concat(ib)).slice(-37);
         } else {
             data = this.eckey.pub.getEncoded(true).concat(ib);
         }
