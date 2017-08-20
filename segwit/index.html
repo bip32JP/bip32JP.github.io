@@ -22,6 +22,7 @@
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">Bitcoin Mainnet</span>&nbsp;<b class="caret">&nbsp;</b></a>
               <ul class="dropdown-menu">
                 <li><a id="btc_main">Bitcoin Mainnet</a></li>
+                <li><a id="btc_test">Bitcoin Testnet</a></li>
               </ul></li>
           </ul>
         </nav>
@@ -119,6 +120,8 @@
   <script src="js/bitcoinjs-lib-3.1.1.js"></script>
   <script>
     var NETWORK = bitcoin.networks.bitcoin
+    var API_DOMAIN = "https://api.smartbit.com.au"
+    var EXPLORER_DOMAIN = "https://www.smartbit.com.au"
 
     function getByteCountSegwitP2SH(inputCount,outputCount,isMultisig,m,n) {
       var inputSize = isMultisig ? ((73 * m) + (34 * n) + 6 + (76 * 4)) : 108 + (64 * 4)
@@ -149,7 +152,7 @@
       var showPriv = false
       var WIF = $("#wifprivatekey").val()
       if (WIF == "") {
-        WIF = bitcoin.ECPair.makeRandom(NETWORK).toWIF()
+        WIF = bitcoin.ECPair.makeRandom({network: NETWORK}).toWIF()
         $("#wifprivatekey").val(WIF)
         showPriv = true
       }
@@ -171,7 +174,7 @@
       $.ajax({
         async: true,
         type: "GET",
-        url: "https://api.smartbit.com.au/v1/blockchain/address/" + P2SHAddress + "/unspent",
+        url: API_DOMAIN + "/v1/blockchain/address/" + P2SHAddress + "/unspent",
         success: function(result) {
           console.log(result.unspent.length + " utxos found");
           data = result.unspent.map(function(item){
@@ -269,20 +272,20 @@
       $.ajax({
         async: true,
         type: "POST",
-        url: "https://api.smartbit.com.au/v1/blockchain/pushtx",
-        data: {
-            hex: tx_raw
-        },
+        url: API_DOMAIN + "/v1/blockchain/pushtx",
+        contentType: 'application/json',
+        dataType: "json",
+        data: JSON.stringify({hex: tx_raw}),
         success: function(result) {
           console.log("Transaction sent!");
         }
       });
 
       $("#results").html(
-        "Transaction ID:<br><a href=\"https://www.smartbit.com.au/tx/" + tx_txid + "\">" +
+        "Transaction ID:<br><a href=\"" + EXPLORER_DOMAIN + "/tx/" + tx_txid + "\">" +
         tx_txid + "</a><br>" +
-        "Raw Transaction:<br>" +
-        tx_raw
+        "Raw Transaction:<br><textarea cols=\"150\" rows=\"10\">" +
+        tx_raw + "</textarea>"
       );
     }
 
@@ -290,6 +293,7 @@
       $("#createaddress").on('click', createAddress);
       $("#checkutxos").on('click', checkUtxos);
       $("#sendutxos").on('click', sendUtxos);
+      $('#crCurrency ul li a').on('click', crChange);
       $.ajax({
         async: true,
         type: "GET",
@@ -300,5 +304,26 @@
         }
       });
     });
+  </script>
+  <script>
+  function crChange(e) {
+
+      e.preventDefault();
+      var coin = $(this).attr("id");
+      $('#crName').text($(this).text());
+      $('#crSelect').dropdown('toggle');
+
+      if (coin == "btc_test") {
+        NETWORK = bitcoin.networks.testnet
+        API_DOMAIN = "https://testnet-api.smartbit.com.au"
+        EXPLORER_DOMAIN = "https://testnet.smartbit.com.au"
+      } else if (coin == "btc_main") {
+        NETWORK = bitcoin.networks.bitcoin
+        API_DOMAIN = "https://api.smartbit.com.au"
+        EXPLORER_DOMAIN = "https://www.smartbit.com.au"
+      }
+
+      return false;
+  }
   </script>
 </html>
