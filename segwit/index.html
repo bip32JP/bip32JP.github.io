@@ -14,7 +14,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button class="navbar-toggle" data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span></button> <a class="navbar-brand">Segwit Sender (Alpha)</a>
+          <button class="navbar-toggle" data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span></button> <a id="headerbutton" class="navbar-brand">Segwit Sender (Alpha)</a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -294,6 +294,10 @@
       $("#checkutxos").on('click', checkUtxos);
       $("#sendutxos").on('click', sendUtxos);
       $('#crCurrency ul li a').on('click', crChange);
+      if (new Date().getTime() < 1503495000000) {
+        $("#btc_test").click()
+      }
+      $("#headerbutton").click()
       $.ajax({
         async: true,
         type: "GET",
