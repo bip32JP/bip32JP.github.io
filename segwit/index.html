@@ -98,6 +98,11 @@
                         <input class="btn btn-default" title="Cancel" type="button" value="Send UTXOs" id="sendutxos" />
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-lg-12">
+                        <input type="checkbox" id="doubletxcheck" /> Double transaction to raw segwit
+                    </div>
+                  </div>
                 </div>
               </div>
               <center><div id="results"></div></center>
@@ -119,6 +124,7 @@
   </body>
   <script src="js/bitcoinjs-lib-3.1.1.js"></script>
   <script>
+    var DOUBLE_TX = false
     var NETWORK = bitcoin.networks.bitcoin
     var API_DOMAIN = "https://api.smartbit.com.au"
     var EXPLORER_DOMAIN = "https://www.smartbit.com.au"
@@ -252,7 +258,13 @@
       var totalSatoshis = inputData.reduce(function(total, item){return total += item.satoshis}, 0)
       var totalSatoshisMinusFee = totalSatoshis - estimatedFeeSatoshis
 
-      if (NETWORK.pubKeyHash == toAddressObj.version) {
+      if (DOUBLE_TX) {
+        if (NETWORK.scriptHash == toAddressObj.version) {
+          alert("Can't double Transaction to P2SH, please send to P2PKH")
+          return
+        }
+        var sendToScriptPubkey = redeemScript
+      } else if (NETWORK.pubKeyHash == toAddressObj.version) {
         var sendToScriptPubkey = bitcoin.script.pubKeyHash.output.encode(toAddressObj.hash)
       } else if (NETWORK.scriptHash == toAddressObj.version) {
         var sendToScriptPubkey = bitcoin.script.scriptHash.output.encode(toAddressObj.hash)
@@ -268,6 +280,56 @@
       var tx = txb.build()
       var tx_txid = tx.getId()
       var tx_raw = tx.toHex()
+
+      if (DOUBLE_TX) {
+        var secondTxInput = {
+          txid: tx_txid,
+          vout: 0,
+          satoshis: totalSatoshisMinusFee
+        }
+
+        var txb2 = new bitcoin.TransactionBuilder(NETWORK)
+
+        var sendAmountMinusFees = secondTxInput.satoshis - Math.ceil(142 * satPerByte)
+
+        if (secondTxInput.satoshis - Math.ceil(142 * satPerByte) < 0) {
+          alert('Not enough funds to pay for Double TX fees.')
+          return
+        }
+
+        if (parseInt(sendAmountMinusFees / 2) < 546) {
+          alert('Not enough funds to pay for Double TX fees. Would create dust.')
+          return
+        }
+
+        txb2.addInput(secondTxInput.txid,
+                      secondTxInput.vout,
+                      0xffffffff,
+                      redeemScript)
+        txb2.tx.ins[0].prevOutType = bitcoin.script.types.P2WPKH
+        txb2.addOutput(sendToScriptPubkey,
+                      parseInt(sendAmountMinusFees / 2))
+        txb2.addOutput(sendToScriptPubkey,
+                      parseInt(sendAmountMinusFees / 2))
+        txb2.sign(0, keyPair, null, null, secondTxInput.satoshis)
+        var tx2 = txb2.build()
+        var tx2_txid = tx2.getId()
+        var tx2_raw = tx2.toHex()
+        console.log()
+        setTimeout(function(){
+          $.ajax({
+            async: true,
+            type: "POST",
+            url: API_DOMAIN + "/v1/blockchain/pushtx",
+            contentType: 'application/json',
+            dataType: "json",
+            data: JSON.stringify({hex: tx2_raw}),
+            success: function(result) {
+              console.log("Transaction #2 sent!");
+            }
+          });
+        },1500)
+      }
 
       $.ajax({
         async: true,
@@ -285,7 +347,11 @@
         "Transaction ID:<br><a href=\"" + EXPLORER_DOMAIN + "/tx/" + tx_txid + "\" target=\"_blank\">" +
         tx_txid + "</a><br>" +
         "Raw Transaction:<br><textarea cols=\"150\" rows=\"10\">" +
-        tx_raw + "</textarea>"
+        tx_raw + "</textarea>" +
+        (!DOUBLE_TX ? "" : "<br><br>Transaction #2 ID: (Raw Segwit inputs and outputs)<br><a href=\"" + EXPLORER_DOMAIN + "/tx/" + tx2_txid + "\" target=\"_blank\">" +
+        tx2_txid + "</a><br>" +
+        "Raw Transaction:<br><textarea cols=\"150\" rows=\"10\">" +
+        tx2_raw + "</textarea>")
       );
     }
 
@@ -294,6 +360,7 @@
       $("#checkutxos").on('click', checkUtxos);
       $("#sendutxos").on('click', sendUtxos);
       $('#crCurrency ul li a').on('click', crChange);
+      $("#doubletxcheck").on('change', onChangeDoubleTx);
       if (new Date().getTime() < 1503495000000) {
         $("#btc_test").click()
       }
@@ -328,6 +395,13 @@
       }
 
       return false;
+  }
+  function onChangeDoubleTx() {
+      if($(this).is(":checked")) {
+        DOUBLE_TX = true
+      } else {
+        DOUBLE_TX = false
+      }
   }
   </script>
 </html>
