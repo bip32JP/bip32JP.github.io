@@ -128,6 +128,7 @@
     var NETWORK = bitcoin.networks.bitcoin
     var API_DOMAIN = "https://api.smartbit.com.au"
     var EXPLORER_DOMAIN = "https://www.smartbit.com.au"
+    var Buffer = null
 
     function getByteCountSegwitP2SH(inputCount,outputCount,isMultisig,m,n) {
       var inputSize = isMultisig ? ((73 * m) + (34 * n) + 6 + (76 * 4)) : 108 + (64 * 4)
@@ -216,7 +217,9 @@
       }
       inputData = JSON.parse(inputData)
 
-      var toAddress = $("#toaddress").val()
+      var toAddressBox = $("#toaddress").val().split(',')
+      var toAddress = toAddressBox[0]
+      var ooishiMessage = toAddressBox[1]
       if (toAddress == "") {
         alert("Please Enter Address to send to!")
         return
@@ -225,6 +228,13 @@
           var toAddressObj = bitcoin.address.fromBase58Check(toAddress)
         } catch(e) {
           alert("To Address was not a valid Bitcoin address!")
+          return
+        }
+      }
+      if (ooishiMessage) {
+        ooishiMessage = bitcoin.script.nullData.output.encode(Buffer.from(ooishiMessage, 'utf8'))
+        if (ooishiMessage.length > 80) {
+          alert("メッセージが長すぎます。全角25文字〜半角77文字までです。\n全角1文字＝半角3文字という計算です。")
           return
         }
       }
@@ -273,6 +283,8 @@
       txb.addOutput(sendToScriptPubkey,
                     totalSatoshisMinusFee)
 
+      if (!DOUBLE_TX && !!ooishiMessage) txb.addOutput(ooishiMessage, 0)
+
       for (var i = 0; i < inputData.length; i++) {
         txb.sign(i, keyPair, redeemScript, null, inputData[i].satoshis)
       }
@@ -311,6 +323,7 @@
                       parseInt(sendAmountMinusFees / 2))
         txb2.addOutput(sendToScriptPubkey,
                       parseInt(sendAmountMinusFees / 2))
+        if (!!ooishiMessage) txb2.addOutput(ooishiMessage, 0)
         txb2.sign(0, keyPair, null, null, secondTxInput.satoshis)
         var tx2 = txb2.build()
         var tx2_txid = tx2.getId()
@@ -365,6 +378,7 @@
         $("#btc_test").click()
       }
       $("#headerbutton").click()
+      Buffer = bitcoin.script.compile([]).constructor // require('safe-buffer').Buffer
       $.ajax({
         async: true,
         type: "GET",
