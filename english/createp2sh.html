@@ -302,9 +302,9 @@
         $.ajax({
             async: false,
             type: "POST",
-            url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://btc.blockr.io/api/v1/tx/push" : "https://tbtc.blockr.io/api/v1/tx/push",
+            url: network.pubKeyHash == bitcoin.networks.bitcoin.pubKeyHash ? "https://insight.bitpay.com/api/tx/send" : "https://test-insight.bitpay.com/api/tx/send",
             data: {
-                hex: rawTxHex
+                rawtx: rawTxHex
             },
             success: function(result){
                 $("#results").html("Sent transaction (id):<br>" + result.data);
