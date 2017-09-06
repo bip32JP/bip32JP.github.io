@@ -307,7 +307,7 @@
                 rawtx: rawTxHex
             },
             success: function(result){
-                $("#results").html("Sent transaction (id):<br>" + result.data);
+                $("#results").html("Sent transaction (id):<br>" + result.txid);
         }});
       } else {
         $("#results").html('Raw Transaction:<br><textarea cols="150" rows="10">' + rawTxHex + '</textarea>');
