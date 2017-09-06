@@ -42,12 +42,12 @@
     }
 
     function blockHeaderFromResponse(res) {
-      return (toUint32(res.data.version) + // version
-              littleEnd(res.data.previousblockhash) + // previous block hash
-              littleEnd(res.data.merkleroot) + // merkle root
-              toUint32(res.data.time) + // Timestamp
-              littleEnd(res.data.bits) + // Difficulty target
-              toUint32(res.data.nonce)) // Nonce
+      return (toUint32(res.version) + // version
+              littleEnd(res.previousblockhash) + // previous block hash
+              littleEnd(res.merkleroot) + // merkle root
+              toUint32(res.time) + // Timestamp
+              littleEnd(res.bits) + // Difficulty target
+              toUint32(res.nonce)) // Nonce
     }
 
     function getBlockHeader () {
@@ -73,12 +73,24 @@
         $.ajax({
           //async: false,
           type: "GET",
-          url: "https://btc.blockr.io/api/v1/block/raw/" + blockname,
-          success: function(result){
-            var header = blockHeaderFromResponse(result);
-            $("#res").html("Block Header:<br/><br/><div style=\"word-break:break-all\">" + header +
-                           "<br/><br/>Block Hash:<br/><br/>" + getBlockHashFromHeader(header) + "</div>");
-            console.log(JSON.stringify(result, null, 1));
+          url: "https://insight.bitpay.com/api/block-index/" + blockname,
+          success: function(result0){
+
+            $.ajax({
+              //async: false,
+              type: "GET",
+              url: "https://insight.bitpay.com/api/block/" + result0.blockHash,
+              success: function(result){
+                var header = blockHeaderFromResponse(result);
+                $("#res").html("Block Header:<br/><br/><div style=\"word-break:break-all\">" + header +
+                               "<br/><br/>Block Hash:<br/><br/>" + getBlockHashFromHeader(header) + "</div>");
+                console.log(JSON.stringify(result, null, 1));
+              },
+              error: function(xhr, status, error){
+                $("#res").html("<font size=\"4\" color=\"#0000ff\"><b>Server Error: Invalid block number or timeout.</b></font>");
+                console.log(error.toString());
+            }});
+
           },
           error: function(xhr, status, error){
             $("#res").html("<font size=\"4\" color=\"#0000ff\"><b>Server Error: Invalid block number or timeout.</b></font>");
