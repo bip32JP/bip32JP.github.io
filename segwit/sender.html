@@ -123,20 +123,11 @@
     </div>
   </body>
   <script src="js/bitcoinjs-lib-3.1.1.js"></script>
-  <script src="js/bip39-2.4.0.js"></script>
-  <script src="js/sjcl.js"></script>
   <script>
     var DOUBLE_TX = false
     var NETWORK = bitcoin.networks.bitcoin
     var API_DOMAIN = "https://api.smartbit.com.au"
     var EXPLORER_DOMAIN = "https://www.smartbit.com.au"
-    var ENCSEED = localStorage.getItem("simple_segwit_wallet_encseed")
-    var XPUB = localStorage.getItem("simple_segwit_wallet_xpub")
-    var ADDRESSES = localStorage.getItem("simple_segwit_wallet_addresses")
-    var UNSPENTS = localStorage.getItem("simple_segwit_wallet_unspents")
-    var BASEPATH = "m/49'/0'/0'" // BIP43 compliant 49 purpose for segwit P2SH.
-
-
 
     function getByteCountSegwitP2SH(inputCount,outputCount,isMultisig,m,n) {
       var inputSize = isMultisig ? ((73 * m) + (34 * n) + 6 + (76 * 4)) : 108 + (64 * 4)
@@ -370,6 +361,10 @@
       $("#sendutxos").on('click', sendUtxos);
       $('#crCurrency ul li a').on('click', crChange);
       $("#doubletxcheck").on('change', onChangeDoubleTx);
+      if (new Date().getTime() < 1503495000000) {
+        $("#btc_test").click()
+      }
+      $("#headerbutton").click()
       $.ajax({
         async: true,
         type: "GET",
@@ -379,76 +374,6 @@
           $("#satperbyte").val(satPerByte)
         }
       });
-      if (!ENCSEED) {
-        do {
-          var choice1 = prompt("No wallet saved. Would you like to generate a new one?\n('yes' = generate new, 'no' = insert your own)")
-        } while (choice1.toLowerCase() !== "yes" && choice1.toLowerCase() !== "no")
-
-        var ____phrase;
-        if (choice1 === "no") {
-          ____phrase = prompt("Enter your 12 or 24 word seed. (Note: this will NOT check for errors. Use at your own risk!)")
-        } else {
-          ____phrase = bip39.generateMnemonic()
-          alert("Please write down this phrase and keep it safe. Do not show this next notification to anyone.")
-          alert(____phrase)
-        }
-        do {
-          var ____password = prompt("Please enter a password (min. 6 characters) to encrypt your seed for storage in your browser.")
-        } while (!____password || ____password.length < 6)
-
-        ENCSEED = sjcl.encrypt(____password, ____phrase)
-        localStorage.setItem("simple_segwit_wallet_encseed", ENCSEED)
-
-        var ____BIP32seed = bip39.mnemonicToSeed(____phrase)
-        var ____hdnode = bitcoin.HDNode.fromSeedBuffer(____BIP32seed)
-        var xpubNode = ____hdnode.deriveHardened(49).deriveHardened(0).deriveHardened(0).neutered()
-
-        // remove sensitive data
-        ____phrase = null
-        ____password = null
-        ____BIP32seed = null
-        ____hdnode = null
-
-        XPUB = xpubNode.toBase58()
-        localStorage.setItem("simple_segwit_wallet_xpub", XPUB)
-
-        var addresses = {}
-
-        var receiveChain = xpubNode.derive(0)
-        for (var i = 0; i < 20; i++) {
-          var pubkey = receiveChain.derive(i).getPublicKeyBuffer()
-          var pubkeyHash = bitcoin.crypto.hash160(pubkey)
-          var redeemScript = bitcoin.script.witnessPubKeyHash.output.encode(pubkeyHash)
-          var redeemScriptHash = bitcoin.crypto.hash160(redeemScript)
-          var scriptPubkey = bitcoin.script.scriptHash.output.encode(redeemScriptHash)
-          var address = bitcoin.address.fromOutputScript(scriptPubkey)
-          addresses[address] = {"path": "/0/" + i}
-        }
-
-        var changeChain = xpubNode.derive(1)
-        for (var i = 0; i < 10; i++) {
-          var pubkey = changeChain.derive(i).getPublicKeyBuffer()
-          var pubkeyHash = bitcoin.crypto.hash160(pubkey)
-          var redeemScript = bitcoin.script.witnessPubKeyHash.output.encode(pubkeyHash)
-          var redeemScriptHash = bitcoin.crypto.hash160(redeemScript)
-          var scriptPubkey = bitcoin.script.scriptHash.output.encode(redeemScriptHash)
-          var address = bitcoin.address.fromOutputScript(scriptPubkey)
-          addresses[address] = {"path": "/1/" + i}
-        }
-
-        ADDRESSES = addresses
-        localStorage.setItem("simple_segwit_wallet_addresses", JSON.stringify(ADDRESSES))
-
-
-
-
-
-
-        // var ENCSEED = localStorage.getItem("simple_segwit_wallet_encseed")
-        // var XPUB = localStorage.getItem("simple_segwit_wallet_xpub")
-        // var ADDRESSES = localStorage.getItem("simple_segwit_wallet_addresses")
-        // var UNSPENTS = localStorage.getItem("simple_segwit_wallet_unspents")
-      }
     });
   </script>
   <script>
