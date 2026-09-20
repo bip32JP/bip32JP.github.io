@@ -23,6 +23,19 @@
   <label for="limit">How many recent entries:</label>
   <input type="number" id="limit" value="1" min="1" max="100" /><br>
   Auto-open latest: <input type="checkbox" id="autoopen" /><br>
+  <label for="proxymode">Proxy:</label>
+  <select id="proxymode">
+    <option value="corsproxy" selected>corsproxy.io</option>
+    <option value="custom">Custom proxy origin</option>
+  </select><br>
+  <div id="corsproxyRow">
+    <label for="apikey"><a href="https://console.corsproxy.io/" target="_blank">CORSproxy.io</a> API key:</label>
+    <input type="password" id="apikey" />
+  </div>
+  <div id="customRow" style="display:none">
+    <label for="proxyorigin">Proxy origin (e.g. from cors_proxy.py in this same repository):</label>
+    <input type="text" id="proxyorigin" value="http://localhost:8080" />
+  </div>
   <button id="fetchButton">Fetch</button><br>
 
   <div id="results"></div>
@@ -33,8 +46,24 @@
 
     const CPRX = atob('aHR0cHM6Ly9jb3JzcHJveHkuaW8vPw==');
 
+    const proxymode = document.getElementById('proxymode');
+    proxymode.addEventListener('change', () => {
+      const custom = proxymode.value === 'custom';
+      document.getElementById('corsproxyRow').style.display = custom ? 'none' : '';
+      document.getElementById('customRow').style.display = custom ? '' : 'none';
+    });
+
+    const proxify = (url) => {
+      if (proxymode.value === 'custom') {
+        const origin = document.getElementById('proxyorigin').value.trim().replace(/\/+$/, '');
+        return `${origin}/?url=${encodeURIComponent(url)}`;
+      }
+      const apiKey = document.getElementById('apikey').value.trim();
+      return `${CPRX}key=${encodeURIComponent(apiKey)}&url=${encodeURIComponent(url)}`;
+    };
+
     const fetchHTML = async (url) => {
-      const res = await fetch(CPRX + encodeURIComponent(url));
+      const res = await fetch(proxify(url));
       const text = await res.text();
       return new DOMParser().parseFromString(text, 'text/html');
     };
@@ -75,9 +104,17 @@
     }
 
     async function fetchData() {
+      const results = document.getElementById('results');
+      if (proxymode.value === 'corsproxy' && !document.getElementById('apikey').value.trim()) {
+        results.textContent = 'Please enter your CORSproxy.io API key.';
+        return;
+      }
+      if (proxymode.value === 'custom' && !document.getElementById('proxyorigin').value.trim()) {
+        results.textContent = 'Please enter your proxy origin (e.g. http://localhost:8080).';
+        return;
+      }
       const limit = parseInt(document.getElementById('limit').value);
       const autoOpen = document.getElementById('autoopen').checked;
-      const results = document.getElementById('results');
       results.textContent = 'Loading...';
 
       const urls = await getLatestUrls(limit);
